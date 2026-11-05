@@ -1,0 +1,4 @@
+name = TABS Order Tablet
+author = Andrew
+description = Equip the order tablet in tool group 6. Click a TABS vehicle and add movement and fire orders in sequence. Q switches mode, F7 executes and F5 stops. Requires the local TABS framework bridge. Single player.
+tags = Gameplay

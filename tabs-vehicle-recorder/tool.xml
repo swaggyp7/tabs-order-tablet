@@ -1,0 +1,18 @@
+<prefab version="1.6.0">
+  <group name="instance=tool/tabs_order_tablet.xml" pos="0 0 0" rot="0 0 0">
+    <group name="eye_space">
+      <!-- Keep the short baton low and to the right in first person. -->
+      <location name="fp_action" tags="name=fp_action" pos="0.45 -0.65 -0.35" rot="10 10 -10"/>
+      <!-- Match the low carry pose used by the vanilla plank tool. -->
+      <location name="tp_action" tags="name=tp_action" pos="0.2 -0.6 -0.2" rot="25 35 -10"/>
+      <location name="tp_action_crouch" tags="name=tp_action_crouch" pos="0.2 -0.7 -0.15" rot="25 35 -10"/>
+    </group>
+    <group name="tool_space">
+      <body dynamic="false">
+        <!-- Six default voxels = 60 cm; the grip sits at the near end. -->
+        <voxbox pos="0 0 -0.3" size="1 1 6" material="wood" color="0.32 0.22 0.13"/>
+      </body>
+      <location name="tp_action_rh" tags="name=tp_action_rh ik_hand" pos="0 0 -0.05" rot="0 90 0"/>
+    </group>
+  </group>
+</prefab>
