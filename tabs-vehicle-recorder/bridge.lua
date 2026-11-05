@@ -37,11 +37,50 @@ do
             local kind=GetString(key.."kind")
             if kind~="move" and kind~="fire" then return SetString(statusKey(id).."message","Invalid order") end
             steps[i]={kind=kind,weapon=GetInt(key.."weapon"),ammo=GetInt(key.."ammo"),body=GetInt(key.."body"),point=Vec(GetFloat(key.."x"),GetFloat(key.."y"),GetFloat(key.."z"))}
+            if kind=="move" and GetBool(key.."attack") then
+                local k=key.."target."
+                steps[i].attack={weapon=GetInt(k.."weapon"),ammo=GetInt(k.."ammo"),body=GetInt(k.."body"),point=Vec(GetFloat(k.."x"),GetFloat(k.."y"),GetFloat(k.."z"))}
+            end
         end
         local saved={}
         for k,x in pairs(v.controls) do saved[k]=x end
         runs[id]={id=id,key=key,steps=steps,i=1,time=0,saved=saved,wheelDrives={}}
         SetBool(key.."running",true); SetString(key.."message","Executing"); SetInt(key.."index",1)
+    end
+    local function shoot(run,step,point,dt,moving)
+        local v=TABSVehicles[run.id]
+        local index=step.weapon>0 and step.weapon or v.controls.curWeapon
+        local w=v.parts.weapons[index]
+        if not w or w.broken or w:getTurret().broken then return finish(run,"Stopped: weapon unavailable") end
+        if step.ammo>0 then
+            if not w.shelltypes or not w.shelltypes[step.ammo] then return finish(run,"Stopped: ammunition type unavailable") end
+            if w.curShell~=step.ammo then
+                local old=w:getCurShell()
+                w.curShell=step.ammo
+                if old and old.ammo==0 and old.reserveammo==0 then w.triggerReload=true end
+            end
+        end
+        v.controls.curWeapon=index
+        if w.triggerReload then return end
+        local target=step.body~=0 and GetBodyVehicle(step.body) or 0
+        v.controls.targetVehicle=target~=0 and target or nil
+        local aligned=TVRPlan.aim(v,w,point)
+        if (w.reloadtimer or 0)>0 or (w.shoottimer or 0)>0 then
+            local timer=math.max(w.reloadtimer or 0,w.shoottimer or 0)
+            if not moving and run.timer and timer>=run.timer then run.stalled=(run.stalled or 0)+dt
+            else run.stalled=0 end
+            run.timer=timer
+            if not moving and run.stalled>10 then return finish(run,"Stopped: weapon reload stalled") end
+            if not moving then run.time=0 end; return
+        end
+        local shell=w:getCurShell()
+        if not shell or shell.ammo<=0 then return finish(run,"Stopped: out of ammunition") end
+        if not aligned or (not moving and VecLength(GetBodyVelocity(v.parts.hull))>1) then
+            if not moving and run.time>20 then finish(run,"Stopped: cannot align gun") end
+            return
+        end
+        TVRPlan.fire(v,w,dt)
+        return true
     end
     local function advance(run,dt)
         local v=TABSVehicles[run.id]
@@ -71,37 +110,7 @@ do
             DriveVehicle(v.vehiclehandle,0,0,true)
         else
             brake(v)
-            local index=step.weapon>0 and step.weapon or v.controls.curWeapon
-            local w=v.parts.weapons[index]
-            if not w or w.broken or w:getTurret().broken then return finish(run,"Stopped: weapon unavailable") end
-            if step.ammo>0 then
-                if not w.shelltypes or not w.shelltypes[step.ammo] then return finish(run,"Stopped: ammunition type unavailable") end
-                if w.curShell~=step.ammo then
-                    local old=w:getCurShell()
-                    w.curShell=step.ammo
-                    if old and old.ammo==0 and old.reserveammo==0 then w.triggerReload=true end
-                end
-            end
-            v.controls.curWeapon=index
-            if w.triggerReload then return end
-            local target=step.body~=0 and GetBodyVehicle(step.body) or 0
-            v.controls.targetVehicle=target~=0 and target or nil
-            local aligned=TVRPlan.aim(v,w,point)
-            if (w.reloadtimer or 0)>0 or (w.shoottimer or 0)>0 then
-                local timer=math.max(w.reloadtimer or 0,w.shoottimer or 0)
-                if run.timer and timer>=run.timer then run.stalled=(run.stalled or 0)+dt
-                else run.stalled=0 end
-                run.timer=timer
-                if run.stalled>10 then return finish(run,"Stopped: weapon reload stalled") end
-                run.time=0; return
-            end
-            local shell=w:getCurShell()
-            if not shell or shell.ammo<=0 then return finish(run,"Stopped: out of ammunition") end
-            if not aligned or VecLength(GetBodyVelocity(v.parts.hull))>1 then
-                if run.time>20 then finish(run,"Stopped: cannot align gun") end
-                return
-            end
-            TVRPlan.fire(v,w,dt)
+            if not shoot(run,step,point,dt,false) then return end
         end
         run.i=run.i+1; run.time=0; run.best=nil; run.timer=nil; run.stalled=nil
         if run.i>#run.steps then finish(run,"Plan complete")
@@ -124,7 +133,7 @@ do
     local originalTick=tick
     function tick(dt)
         SetFloat(P.."bridgeTime",GetTime())
-        SetInt(P.."motionVersion",4)
+        SetInt(P.."motionVersion",5)
         if not HasKey(P.."clientTime") or math.abs(GetTime()-GetFloat(P.."clientTime"))>.75 then
             for _,run in pairs(runs) do finish(run,"Tool disabled") end
         else
@@ -157,7 +166,16 @@ do
     function update(dt)
         originalUpdate(dt)
         for _,run in pairs(runs) do
-            if run.steps[run.i].kind=="fire" then guardedAdvance(run,dt) end
+            local step=run.steps[run.i]
+            if step.kind=="fire" then guardedAdvance(run,dt)
+            elseif step.attack then
+                local ok,err=pcall(function()
+                    local point=TVRPlan.point(step.attack)
+                    if not point then return finish(run,"Stopped: target lost") end
+                    shoot(run,step.attack,point,dt,true)
+                end)
+                if not ok then finish(run,"Stopped: "..tostring(err)) end
+            end
         end
     end
 end

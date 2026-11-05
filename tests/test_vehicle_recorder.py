@@ -81,7 +81,7 @@ function click(key) pressed={[key]=true}; tick(); pressed={} end
 backendTick(0); click('lmb'); backendTick(0)
 rayBody=30; rayDist=15; click('lmb')
 click('q'); rayBody=40; click('lmb'); click('x'); click('lmb')
-click('q'); rayBody=30; rayDist=25; click('lmb')
+click('q'); click('q'); rayBody=30; rayDist=25; click('lmb')
 click('q'); rayBody=40; click('z'); click('lmb'); click('f7')
 backendTick(.016)
 local p='level.tvrplan.car.100.'
@@ -124,3 +124,28 @@ phase=nil
 """)
 print('PASS: tablet selection, mixed five-order execution, moving target, reload, ammo and stop')
 
+
+lua.execute("""
+-- Configure a moving-fire segment through actual tablet inputs.
+V.criticalErrorTracks=false
+entities[10].transform=Transform(Vec(10,0,30))
+MG.reloadtimer=0; MG.shoottimer=0; MG.shelltypes[1].ammo=5
+click('delete'); click('q'); rayBody=40; click('lmb')
+rayBody=30; rayDist=40; click('lmb')
+rayDist=60; click('lmb'); click('f7'); backendTick(.05)
+local p='level.tvrplan.car.100.'
+assert(GetBool('level.tvrplan.step.1.attack'))
+assert(not GetBool('level.tvrplan.step.2.attack'))
+assert(demand.throttle>0 and not demand.brake)
+local before=copy(entities[10].transform.pos); physics(.1)
+assert(VecLength(VecSub(entities[10].transform.pos,before))>0)
+function GetBodyVelocity() return Vec(0,0,-4) end
+local n=#shots
+backendUpdate(.1)
+assert(#shots==n+1 and GetInt(p..'index')==1,'must shoot at speed without advancing waypoint')
+backendUpdate(.1); assert(#shots==n+1,'moving fire respects reload')
+MG.reloadtimer=0; backendUpdate(.1); assert(#shots==n+2)
+click('f5'); backendTick(0); MG.reloadtimer=0; backendUpdate(.1)
+assert(#shots==n+2 and not GetBool(p..'running'))
+""")
+print('PASS: moving fire at speed, target serialization, segment isolation, reload and stop')

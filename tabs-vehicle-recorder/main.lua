@@ -6,6 +6,7 @@ local plans={}
 local function statusKey() return P.."car."..vehicle.."." end
 local mode="move"
 local notice=""
+local attack=nil
 local pending=nil
 local catalog=P.."catalog."
 local weapon,ammo=0,0
@@ -37,6 +38,12 @@ local function execute()
     for i,s in ipairs(steps) do
         local k=P.."step."..i.."."
         SetString(k.."kind",s.kind); SetInt(k.."body",s.body)
+        SetBool(k.."attack",s.attack~=nil)
+        if s.attack then
+            local t=s.attack; local key=k.."target."
+            SetInt(key.."body",t.body); SetInt(key.."weapon",t.weapon); SetInt(key.."ammo",t.ammo)
+            SetFloat(key.."x",t.point[1]); SetFloat(key.."y",t.point[2]); SetFloat(key.."z",t.point[3])
+        end
         SetInt(k.."weapon",s.weapon or 0); SetInt(k.."ammo",s.ammo or 0)
         SetFloat(k.."x",s.point[1]); SetFloat(k.."y",s.point[2]); SetFloat(k.."z",s.point[3])
     end
@@ -70,6 +77,7 @@ local function pick()
         local plan=plans[v] or {steps={},mode="move",weapon=0,ammo=0}
         plans[v]=plan
         steps,mode,weapon,ammo=plan.steps,plan.mode,plan.weapon,plan.ammo
+        attack=plan.attack
         SetInt(P.."inspect",v); SetInt(catalog.."vehicle",0)
         notice="Vehicle selected"; return
     end
@@ -77,11 +85,17 @@ local function pick()
     if mode=="move" and n[2]<.55 then notice="Choose drivable ground"; return end
     local point=VecAdd(t.pos,VecScale(dir,dist))
     local body=0
-    if mode=="fire" and IsBodyDynamic(b) then body=b; point=TransformToLocalPoint(GetBodyTransform(b),point) end
-    if mode=="fire" and (not loaded() or weapon==0 or GetInt(catalog..weapon..".count")==0) then
+    if mode~="move" and IsBodyDynamic(b) then body=b; point=TransformToLocalPoint(GetBodyTransform(b),point) end
+    if mode~="move" and (not loaded() or weapon==0 or GetInt(catalog..weapon..".count")==0) then
         notice="Waiting for an available weapon"; return
     end
-    steps[#steps+1]={kind=mode,body=body,point=point,weapon=weapon,ammo=ammo}; notice="Added order "..#steps
+    if mode=="movingfire" then
+        attack={body=body,point=point,weapon=weapon,ammo=ammo}
+        mode="move"; notice="Target selected: click the next waypoint"; return
+    end
+    steps[#steps+1]={kind=mode,body=body,point=point,weapon=weapon,ammo=ammo,attack=mode=="move" and attack or nil}
+    if mode=="move" then attack=nil end
+    notice="Added order "..#steps
 end
 local function markers()
     local last=GetVehicleTransform(vehicle).pos
@@ -95,6 +109,11 @@ local function markers()
             DrawLine(last,p,r,g,b,.7)
             DrawLine(VecAdd(p,Vec(-.45,0,0)),VecAdd(p,Vec(.45,0,0)),r,g,b,1)
             DrawLine(p,VecAdd(p,Vec(0,1,0)),r,g,b,1)
+            if s.attack then
+                local t=s.attack
+                local target=t.body==0 and t.point or (valid(t.body) and TransformToParentPoint(GetBodyTransform(t.body),t.point))
+                if target then DrawLine(p,target,1,.35,.25,1) end
+            end
             if moving then last=p end
         end
     end
@@ -113,17 +132,19 @@ function tick()
     if pending then return end
     if vehicle~=0 and InputPressed("r") then
         local plan=plans[vehicle]
-        plan.mode,plan.weapon,plan.ammo=mode,weapon,ammo
+        plan.mode,plan.weapon,plan.ammo,plan.attack=mode,weapon,ammo,attack
+        attack=nil
         vehicle=0; steps={}; notice="Select a vehicle"; return
     end
     if running then return end
     if loaded() and weapon==0 and GetInt(catalog.."count")>0 then selectWeapon(GetInt(catalog.."current")) end
     if valid(vehicle) and InputPressed("delete") then
-        steps={}; plans[vehicle].steps=steps; notice="Selected plan cleared"
-    elseif InputPressed("q") and valid(vehicle) then mode=mode=="move" and "fire" or "move"; notice=""
-    elseif mode=="fire" and loaded() and InputPressed("z") and GetInt(catalog.."count")>0 then
+        steps={}; attack=nil; plans[vehicle].steps=steps; notice="Selected plan cleared"
+    elseif InputPressed("q") and valid(vehicle) then mode=mode=="move" and "fire" or (mode=="fire" and "movingfire" or "move"); notice=""
+    elseif InputPressed("g") then attack=nil; notice="Moving fire target cleared"
+    elseif mode~="move" and loaded() and InputPressed("z") and GetInt(catalog.."count")>0 then
         selectWeapon(weapon%GetInt(catalog.."count")+1); notice=""
-    elseif mode=="fire" and loaded() and InputPressed("x") and GetInt(catalog..weapon..".count")>0 then
+    elseif mode~="move" and loaded() and InputPressed("x") and GetInt(catalog..weapon..".count")>0 then
         ammo=ammo%GetInt(catalog..weapon..".count")+1; notice=""
     elseif InputPressed("backspace") and #steps>0 then table.remove(steps); notice="Removed last order"
     elseif InputPressed("f7") and valid(vehicle) then execute()
@@ -132,29 +153,30 @@ end
 function draw()
     if not equipped() then return end
     local running=GetBool(statusKey().."running")
-    UiPush(); UiTranslate(26,UiHeight()-205); UiFont("regular.ttf",17); UiAlign("left top")
-    UiColor(.03,.05,.07,.9); UiRect(720,185); UiTranslate(14,10); UiColor(1,1,1)
+    UiPush(); UiTranslate(26,UiHeight()-240); UiFont("regular.ttf",17); UiAlign("left top")
+    UiColor(.03,.05,.07,.9); UiRect(980,220); UiTranslate(14,10); UiColor(1,1,1)
     local function line(s) UiText(s); UiTranslate(0,25) end
-    line("TABS ORDER TABLET  v4  /  "..(running and "EXECUTING" or (vehicle==0 and "SELECT" or string.upper(mode))))
-    line(vehicle==0 and "LMB  Select vehicle" or "LMB  Add order      Q  Move / Fire      Backspace  Undo      R  Switch vehicle")
+    line("TABS ORDER TABLET  v5  /  "..(running and "EXECUTING" or (vehicle==0 and "SELECT" or string.upper(mode))))
+    line(vehicle==0 and "LMB  Select vehicle" or "LMB  Add order      Q  Move / Fire / Moving fire      Backspace  Undo      R  Switch vehicle")
     line("F7  Execute     F5  Stop selected     Del  Clear    |    Vehicle #"..vehicle.."    "..#steps.." orders")
-    if mode=="fire" and loaded() then
+    if mode~="move" and loaded() then
         line("Z  Weapon: "..GetString(catalog..weapon..".name").."     X  Ammo: "..GetString(catalog..weapon.."."..ammo))
     end
     local first=running and math.max(1,GetInt(statusKey().."index")-1) or math.max(1,#steps-5)
     local labels={}
     for i=first,math.min(#steps,first+5) do
         local s=steps[i]
-        labels[#labels+1]=i.." "..(s.kind=="fire" and ("FIRE "..s.weapon.."/"..s.ammo) or "MOVE")
+        labels[#labels+1]=i.." "..(s.kind=="fire" and ("FIRE "..s.weapon.."/"..s.ammo) or (s.attack and "MOVE+FIRE" or "MOVE"))
     end
     line(table.concat(labels,"   "))
     local i=GetInt(statusKey().."index")
+    if attack then line("Next waypoint: MOVE + FIRE     G  Cancel target") end
     local status=notice~="" and notice or GetString(statusKey().."message")
     if running then
         status="Executing order "..i
         if steps[i] and steps[i].kind=="move" then status=status..string.format("   %.1f m remaining",GetFloat(statusKey().."remaining")) end
     end
-    if not ready() or GetInt(P.."motionVersion")~=4 then status="Reload the level to load the v4 TABS bridge" end
+    if not ready() or GetInt(P.."motionVersion")~=5 then status="Reload the level to load the v5 TABS bridge" end
     line(status)
     UiPop()
 end
