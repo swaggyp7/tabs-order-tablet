@@ -10,7 +10,7 @@
 2. 解压后确认有 `TABS-bridge/main.lua`、`tabs-vehicle-recorder/`、`INSTALL.txt` 和 `checksums.json`。
 3. 找到安装 TABS 的 Steam 库，进入 `steamapps/workshop/content/1167630/3148138736/`。这个目录应已存在 `main.lua`，不是游戏 data 目录，也不是指令板模组目录。
 4. 备份你自己的原始 `main.lua`。核对原文件 SHA256 是否匹配下方数值；不匹配表示不同版本或已有补丁，勿直接覆盖。
-5. 将 ZIP 中的 `TABS-bridge/main.lua` 复制到上述 TABS 目录，替换同名文件。无需替换 `ballistics.lua`，也不需要 Python。
+5. 将 ZIP 中的 `TABS-bridge/main.lua` 复制到上述 TABS 目录，替换同名文件。无需替换 `ballistics.lua`。
 6. 工具本体二选一：使用工坊订阅版本；或将 ZIP 中的 `tabs-vehicle-recorder` 整个文件夹放入 `Documents/Teardown/mods/`。只启用一个版本。
 7. 启动游戏，启用 TABS 和 TABS Fusion，重新进入单人地图，在工具第 6 组找到工具。按 H 展开完整按键。
 
@@ -29,7 +29,6 @@
 ### 冲突、更新与卸载
 
 - 本 ZIP 不包含 Hit Replay 合并补丁。两者都替换 main.lua，直接相互覆盖会丢失其中一套功能。已有其他补丁时不要叠加覆盖。
-- 此教程使用手动替换方式，不要再运行自动安装器。
 - TABS 更新可能覆盖补丁，需重新确认版本兼容性。
 - 卸载时退出游戏，恢复**你自己安装前备份的** main.lua，再禁用指令板。
 - 如果提示未连接，检查是否替换了正确 Steam 库中 TABS 根目录的 main.lua，确认 TABS 已启用，并重新载入地图。
@@ -41,8 +40,8 @@ Requires single-player Teardown, TABS Vehicle Framework and its required items. 
 1. Close Teardown. Download **TABS-Fusion-v0.6.2.zip** from the release **Assets**, not Source code.
 2. Extract it. Locate `SteamLibrary/steamapps/workshop/content/1167630/3148138736/`.
 3. Back up your original main.lua and compare its SHA256 with the supported value above. A different hash means another version or existing modifications; do not overwrite it with this replacement.
-4. Copy the ZIP's `TABS-bridge/main.lua` over main.lua in that TABS folder. No ballistics.lua replacement or Python is needed.
+4. Copy the ZIP's `TABS-bridge/main.lua` over main.lua in that TABS folder. No ballistics.lua replacement is needed.
 5. Use either the Workshop tool or the local ZIP copy. For the local copy, place the entire tabs-vehicle-recorder folder in Documents/Teardown/mods. Enable only one copy.
 6. Enable TABS and TABS Fusion, reload a single-player level, and equip the tool in group 6. Press H for controls.
 
-This release does not combine the Hit Replay bridge. Patches replacing the same main.lua overwrite each other. Do not also run the automatic installer. TABS updates may overwrite the bridge or change compatibility. Restore YOUR original backup to uninstall, then disable the tool.
+This release does not combine the Hit Replay bridge. Patches replacing the same main.lua overwrite each other. TABS updates may overwrite the bridge or change compatibility. Restore YOUR original backup to uninstall, then disable the tool.

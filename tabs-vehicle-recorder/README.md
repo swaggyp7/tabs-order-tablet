@@ -20,13 +20,9 @@
 
 ## 安装
 
-**普通玩家无需 Python。** 从 [Release](https://github.com/swaggyp7/tabs-order-tablet/releases/tag/v0.6.2) 的 Assets 下载 TABS-Fusion-v0.6.2.zip，按 INSTALL.txt 安装。退出游戏，备份并核对 TABS 原版 main.lua 的哈希后，将包中的 TABS-bridge/main.lua 替换到 TABS 框架目录。已订阅工具的玩家无需再复制 ZIP 内的工具本体；使用本地版则将 tabs-vehicle-recorder 放入 Documents/Teardown/mods。只启用一个工具版本。
+从 [Release](https://github.com/swaggyp7/tabs-order-tablet/releases/tag/v0.6.2) 的 Assets 下载 TABS-Fusion-v0.6.2.zip，按 INSTALL.txt 安装。退出游戏，备份并核对 TABS 原版 main.lua 的哈希后，将包中的 TABS-bridge/main.lua 替换到 TABS 框架目录。已订阅工具的玩家无需再复制 ZIP 内的工具本体；使用本地版则将 tabs-vehicle-recorder 放入 Documents/Teardown/mods。只启用一个工具版本。
 
 完整步骤：[中英文安装教程](../docs/INSTALL.md)。本包不能直接叠加 Hit Replay 等同文件替换补丁。卸载时恢复自己的安装前备份。
-
-## 开发者检查（普通玩家不需要）
-
-需要 Python 和 Lupa（`pip install lupa`）。运行 `python tests/test_vehicle_recorder.py`、`python tests/test_vehicle_recorder_weapons.py`、`python tests/test_vehicle_recorder_install.py`。这些是模拟回调检查，不能替代游戏内实测。
 
 第一人称工具每帧使用显式相机空间姿势，棒身放在右下角并向外偏转；第三人称使用 prefab 持握挂点。最终可见范围需在游戏中确认。
 

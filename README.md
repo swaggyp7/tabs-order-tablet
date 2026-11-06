@@ -6,10 +6,6 @@ Plan routes, assign firing targets, and coordinate TABS vehicles with a handheld
 
 ![Preview](tabs-vehicle-recorder/preview.jpg)
 
-> **No Python required.** Install the release ZIP by copying the mod folder and one TABS bridge replacement file. A Workshop subscription alone does not install the bridge.
->
-> **无需安装 Python。** 下载 Release ZIP，按说明复制工具本体并替换一个桥接文件。已订阅工坊版时，只需安装桥接，无需再复制工具本体。
-
 ## Features
 
 - Combine movement and individual shots in one queue.
@@ -20,7 +16,7 @@ Plan routes, assign firing targets, and coordinate TABS vehicles with a handheld
 - Set each vehicle's start delay to **3 / 5 / 7 / 10 seconds**.
 - Compact HUD; press H to expand the controls.
 
-## Installation — no Python
+## Installation
 
 Requires **single-player Teardown**, [TABS Vehicle Framework](https://steamcommunity.com/sharedfiles/filedetails/?id=3148138736), and its required Workshop items.
 
@@ -77,7 +73,7 @@ Use **R** to select another vehicle and prepare its plan. **F8** starts all prep
 
 ## Compatibility and uninstalling
 
-- This is the **stable bridge version**, not the no-patch experiment. It requires the supported native TABS version.
+- Requires the TABS version supported by the bridge replacement.
 - **TABS Hit Replay and other main.lua replacements cannot simply be installed over this package.** This ZIP does not contain a combined patch; replacing the same file removes the previous patch.
 - TABS updates may overwrite the bridge or change compatibility. Check for a compatible release before reinstalling.
 - Entering the executing vehicle stops its plan. Entering another vehicle does not. Plans last for the current level only.
@@ -85,7 +81,3 @@ Use **R** to select another vehicle and prepare its plan. **F8** starts all prep
 - To uninstall: close the game, restore **your own pre-install main.lua backup**, and disable Fusion.
 
 If TABS is unavailable in the HUD, check the framework file in the correct Steam library, enable TABS, and reload the level.
-
-## Developer tools
-
-The optional Python patch installer is for an alternative development setup. **Players installing the release ZIP do not need it.** Do not run it on top of the manual replacement. See [developer notes](tabs-vehicle-recorder/RELEASE.md#developer-tools).

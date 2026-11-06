@@ -5,7 +5,7 @@ Create action queues for TABS vehicles using a handheld tool. Combine driving, i
 
 [h2]IMPORTANT: Additional installation required[/h2]
 [b]Subscribing alone does not complete setup.[/b]
-Install the TABS bridge replacement from GitHub. The manual ZIP requires no Python.
+Install the TABS bridge replacement from GitHub.
 [url=https://github.com/swaggyp7/tabs-order-tablet/blob/main/docs/INSTALL.md]► Step-by-step installation guide[/url]
 [url=https://github.com/swaggyp7/tabs-order-tablet/releases/tag/v0.6.2]► Download mod + bridge ZIP[/url]
 

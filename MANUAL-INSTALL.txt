@@ -10,12 +10,11 @@ TABS FUSION v0.6.2 — 手动替换安装 / MANUAL INSTALL
 请用 PowerShell Get-FileHash -Algorithm SHA256 检查你自己的原文件。
 哈希不符时不要直接覆盖；可能是其他 TABS 版本或已有补丁。
 替换文件仅包含原版基础代码和指令板桥接，不包含 Hit Replay 或实验探针。
-本次包不是免桥接版本。无需 Python；不要再叠加运行自动安装器。
 卸载：关闭游戏，恢复你自己的 main.lua 备份，并禁用本 mod。
 Workshop 更新可能覆盖替换文件；先核对新版本兼容性再安装。
 
-Exit Teardown and back up your own TABS main.lua. Copy tabs-vehicle-recorder to Documents/Teardown/mods. Copy TABS-bridge/main.lua over the TABS Workshop root main.lua (item 3148138736). Enable both mods and reload the level. This release uses a bridge and requires no Python.
-Check your ORIGINAL main.lua against the SHA256 above before replacement. A different hash means a different version or existing patches: do not overwrite it with this file. The replacement includes only the verified native baseline and the order-tablet bridge, without Hit Replay or the no-patch experiment. Do not also run the automatic patch installer. Restore YOUR backup to uninstall. Workshop updates may overwrite this file.
+Exit Teardown and back up your own TABS main.lua. Copy tabs-vehicle-recorder to Documents/Teardown/mods. Copy TABS-bridge/main.lua over the TABS Workshop root main.lua (item 3148138736). Enable both mods and reload the level.
+Check your ORIGINAL main.lua against the SHA256 above before replacement. A different hash means a different version or existing patches: do not overwrite it with this file. The replacement includes only the verified native baseline and the order-tablet bridge, without Hit Replay or the no-patch experiment. Restore YOUR backup to uninstall. Workshop updates may overwrite this file.
 
 Controls: LMB select/add; Q route/shot/moving-fire target; Z/X weapon/ammo;
 F7 selected; F8 all; F5 stop selected; T 3/5/7/10 s delay; H help;
