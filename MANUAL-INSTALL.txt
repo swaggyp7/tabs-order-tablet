@@ -1,4 +1,4 @@
-TABS FUSION v0.6.2 — 手动替换安装 / MANUAL INSTALL
+TABS FUSION v0.6.3 — 手动替换安装 / MANUAL INSTALL
 
 1. 退出游戏，备份你自己的 TABS main.lua。
 2. 将 tabs-vehicle-recorder 文件夹复制到 Documents/Teardown/mods/。

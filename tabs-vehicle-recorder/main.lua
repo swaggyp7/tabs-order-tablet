@@ -10,6 +10,7 @@ local notice=""
 local attack=nil
 local pending=nil
 local showHelp=false
+local function fleetKey() return HasKey("level.wtr.bridgeVersion") and "f6" or "f8" end
 local catalog=P.."catalog."
 local weapon,ammo=0,0
 local function loaded()
@@ -152,7 +153,7 @@ function tick()
     if valid(vehicle) then markers() elseif vehicle~=0 then plans[vehicle]=nil; vehicle=0; steps={}; notice="Vehicle lost" end
     if InputPressed("h") then showHelp=not showHelp end
     if pending then return end
-    if InputPressed("f8") then executeAll(); return end
+    if InputPressed(fleetKey()) then executeAll(); return end
     if vehicle~=0 and InputPressed("r") then
         local plan=plans[vehicle]
         plan.mode,plan.weapon,plan.ammo,plan.attack=mode,weapon,ammo,attack
@@ -202,7 +203,7 @@ function draw()
     local fleet=0
     for id,plan in pairs(plans) do if valid(id) and #plan.steps>0 then fleet=fleet+1 end end
     text(18,44,selected and ("VEHICLE #"..vehicle.."   /   "..#steps.." ORDERS") or "Aim at a TABS vehicle and click to select",14,{.6,.67,.72})
-    text(18,66,selected and ("T  DELAY "..delays[plans[vehicle].delay or 1].."s    /    "..fleet.." VEHICLE PLANS") or (fleet.." vehicle plans ready   /   F8 to start all"),13,{.6,.67,.72})
+    text(18,66,selected and ("T  DELAY "..delays[plans[vehicle].delay or 1].."s    /    "..fleet.." VEHICLE PLANS") or (fleet.." vehicle plans ready   /   "..string.upper(fleetKey()).." to start all"),13,{.6,.67,.72})
     rule(90)
     local first=running and math.max(1,index) or math.max(1,#steps-2)
     if #steps==0 then
@@ -232,7 +233,7 @@ function draw()
         text(18,202,"Z  "..GetString(catalog..weapon..".name").."    X  "..GetString(catalog..weapon.."."..ammo),13)
     else text(18,202,"LMB  Add order     Q  Change mode     R  Select vehicle",13,{.6,.67,.72}) end
     rule(228)
-    text(18,242,"F7  START      F8  START ALL      F5  STOP",15)
+    text(18,242,"F7  START      "..string.upper(fleetKey()).."  START ALL      F5  STOP",15)
     text(18,270,"H  "..(showHelp and "Hide controls" or "Show controls"),12,{.6,.67,.72})
     if showHelp then
         rule(294)

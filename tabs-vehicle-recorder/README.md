@@ -20,10 +20,14 @@
 
 ## 安装
 
-从 [Release](https://github.com/swaggyp7/tabs-order-tablet/releases/tag/v0.6.2) 的 Assets 下载 TABS-Fusion-v0.6.2.zip，按 INSTALL.txt 安装。退出游戏，备份并核对 TABS 原版 main.lua 的哈希后，将包中的 TABS-bridge/main.lua 替换到 TABS 框架目录。已订阅工具的玩家无需再复制 ZIP 内的工具本体；使用本地版则将 tabs-vehicle-recorder 放入 Documents/Teardown/mods。只启用一个工具版本。
+从 [Release](https://github.com/swaggyp7/tabs-order-tablet/releases/tag/v0.6.3) 的 Assets 下载 TABS-Fusion-v0.6.3.zip，按 INSTALL.txt 安装。退出游戏，备份并核对 TABS 原版 main.lua 的哈希后，将包中的 TABS-bridge/main.lua 替换到 TABS 框架目录。已订阅工具的玩家无需再复制 ZIP 内的工具本体；使用本地版则将 tabs-vehicle-recorder 放入 Documents/Teardown/mods。只启用一个工具版本。
 
-完整步骤：[中英文安装教程](../docs/INSTALL.md)。本包不能直接叠加 Hit Replay 等同文件替换补丁。卸载时恢复自己的安装前备份。
+完整步骤：[中英文安装教程](../docs/INSTALL.md)。普通版不能直接叠加 Hit Replay 等同文件替换补丁；同时使用请按下方兼容版教程安装。卸载时恢复自己的安装前备份。
 
 第一人称工具每帧使用显式相机空间姿势，棒身放在右下角并向外偏转；第三人称使用 prefab 持握挂点。最终可见范围需在游戏中确认。
 
 界面：左下角显示当前车辆、模式、延迟和最多三条队列。H 展开完整快捷键。界面按屏幕大小自动缩放；长武器名会裁切，完整名称仍保存在武器目录。
+
+## Hit Replay 兼容版
+
+同时使用回放时下载 TABS-Fusion-Hit-Replay-v0.6.3.zip，按 docs/HIT-REPLAY.md 教程同时替换 main.lua 与 TABS/scripts/ballistics.lua。检测到回放桥接后 Fusion 全部执行自动改为 F6，Hit Replay 保留 F8/F9/F10。勿叠加双方独立替换包。

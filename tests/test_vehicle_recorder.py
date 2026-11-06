@@ -1,6 +1,7 @@
 """Drive the real tablet and framework callbacks through a five-order program."""
 from pathlib import Path
 import sys
+import os
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'.tools/python'))
 from lupa.lua51 import LuaRuntime
@@ -57,6 +58,11 @@ function SetToolHandPoseLocalTransform(r,l) handPose=r end
 function tick() end
 function update() end
 """)
+replay_main=os.environ.get('TVR_TEST_REPLAY_MAIN')
+if replay_main:
+    replay=Path(replay_main).read_text(encoding='utf-8-sig')
+    lua.execute('function SaveDebugInfo() end; function ProjectileOperations() end; function SpallOperations() end; function Spall() end')
+    lua.execute(replay[replay.index('-- Local TABS Hit Replay integration'):])
 for name in ('core','weapons','bridge'):
     load('tabs-vehicle-recorder/'+name+'.lua')
 lua.execute("""
@@ -79,7 +85,10 @@ end
 load('tabs-vehicle-recorder/main.lua')
 lua.execute("""
 init(); registry['game.player.tool']=tool
-function click(key) pressed={[key]=true}; tick(); pressed={} end
+function click(key)
+    if key=="f8" and HasKey("level.wtr.bridgeVersion") then key="f6" end
+    pressed={[key]=true}; tick(); pressed={}
+end
 backendTick(0); click('lmb'); backendTick(0)
 rayBody=30; rayDist=15; click('lmb')
 click('q'); rayBody=40; click('lmb'); click('x'); click('lmb')
@@ -196,7 +205,19 @@ function UiRect(w,h) assert(w<=500 and h<=400) end
 function UiWindow(w,h) assert(w>0 and h>0) end
 function UiFont() end
 function UiText(s) text[s]=true end
-draw(); assert(depth==0 and text['COUNTDOWN'] and text['F7  START      F8  START ALL      F5  STOP'])
+draw(); assert(depth==0 and text['COUNTDOWN'] and text['F7  START      '..(HasKey('level.wtr.bridgeVersion') and 'F6' or 'F8')..'  START ALL      F5  STOP'])
 click('h'); draw(); assert(depth==0 and text['T  Start delay: 3 / 5 / 7 / 10 seconds'])
 """)
 print('PASS: compact HUD, expanded help and small-screen draw lifecycle')
+
+if replay_main:
+    lua.execute("""
+    assert(GetInt('level.wtr.bridgeVersion')==3 and GetInt('level.tvrplan.motionVersion')==6)
+    local seq=GetInt('level.tvrplan.request')
+    pressed={f8=true}; tick(); pressed={}
+    assert(GetInt('level.tvrplan.request')==seq,'F8 must remain reserved for Hit Replay')
+    pressed={f6=true}; tick(); pressed={}
+    assert(GetInt('level.tvrplan.request')==seq+1,'F6 must launch fleet with replay bridge')
+    assert(WTR.now>0)
+    """)
+    print('PASS: real Hit Replay callback chain survives Fusion queues; F8 reserved and F6 starts fleet')

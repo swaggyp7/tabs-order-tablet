@@ -2,7 +2,7 @@
 
 Plan routes, assign firing targets, and coordinate TABS vehicles with a handheld tool in Teardown.
 
-**[Download v0.6.2](https://github.com/swaggyp7/tabs-order-tablet/releases/tag/v0.6.2)** · **[安装教程 / Installation guide](docs/INSTALL.md)** · [Workshop description](docs/WORKSHOP-DESCRIPTION.txt)
+**[Download v0.6.3](https://github.com/swaggyp7/tabs-order-tablet/releases/tag/v0.6.3)** · **[安装教程 / Installation guide](docs/INSTALL.md)** · [Workshop description](docs/WORKSHOP-DESCRIPTION.txt)
 
 ![Preview](tabs-vehicle-recorder/preview.jpg)
 
@@ -16,11 +16,20 @@ Plan routes, assign firing targets, and coordinate TABS vehicles with a handheld
 - Set each vehicle's start delay to **3 / 5 / 7 / 10 seconds**.
 - Compact HUD; press H to expand the controls.
 
-## Installation
+## Choose a download
+
+| Setup | ZIP | Guide |
+| --- | --- | --- |
+| Fusion only | TABS-Fusion-v0.6.3.zip | [Installation](docs/INSTALL.md) |
+| Fusion + Hit Replay | **TABS-Fusion-Hit-Replay-v0.6.3.zip** | **[兼容版教程 / Combined guide](docs/HIT-REPLAY.md)** |
+
+The combined ZIP replaces both main.lua and TABS/scripts/ballistics.lua. Subscribe to the Hit Replay UI separately. Fusion START ALL uses **F6** with the replay bridge; Hit Replay keeps F8/F9/F10. Ordinary Fusion uses F8.
+
+## Installation (Fusion only)
 
 Requires **single-player Teardown**, [TABS Vehicle Framework](https://steamcommunity.com/sharedfiles/filedetails/?id=3148138736), and its required Workshop items.
 
-1. Close Teardown. Open the [release page](https://github.com/swaggyp7/tabs-order-tablet/releases/tag/v0.6.2) and download **TABS-Fusion-v0.6.2.zip** from **Assets**, not the automatically generated **Source code** ZIP.
+1. Close Teardown. Open the [release page](https://github.com/swaggyp7/tabs-order-tablet/releases/tag/v0.6.3) and download **TABS-Fusion-v0.6.3.zip** from **Assets**, not the automatically generated **Source code** ZIP.
 2. Extract it and find your TABS framework directory:
 
    ```text
@@ -39,7 +48,7 @@ Requires **single-player Teardown**, [TABS Vehicle Framework](https://steamcommu
 ### What is in the ZIP?
 
 ```text
-TABS-Fusion-v0.6.2.zip
+TABS-Fusion-v0.6.3.zip
 ├── tabs-vehicle-recorder/   Tool mod and preview.jpg
 ├── TABS-bridge/
 │   └── main.lua            TABS framework replacement
@@ -63,7 +72,7 @@ Use **R** to select another vehicle and prepare its plan. **F8** starts all prep
 | Q | Route / Single shot / Moving fire target |
 | Z / X | Choose weapon / ammunition in target modes |
 | F7 | Start selected vehicle's plan |
-| F8 | Start all prepared plans |
+| F8 / F6 with replay bridge | Start all prepared plans |
 | F5 | Stop selected vehicle, including countdown |
 | T | Cycle 3 / 5 / 7 / 10 second delay; default 3 |
 | R | Select another vehicle; keep plans |
@@ -74,7 +83,7 @@ Use **R** to select another vehicle and prepare its plan. **F8** starts all prep
 ## Compatibility and uninstalling
 
 - Requires the TABS version supported by the bridge replacement.
-- **TABS Hit Replay and other main.lua replacements cannot simply be installed over this package.** This ZIP does not contain a combined patch; replacing the same file removes the previous patch.
+- For **TABS Hit Replay**, use the [combined replacement pair](docs/HIT-REPLAY.md). Do not stack standalone bridge packages; replacing the same file removes the previous patch.
 - TABS updates may overwrite the bridge or change compatibility. Check for a compatible release before reinstalling.
 - Entering the executing vehicle stops its plan. Entering another vehicle does not. Plans last for the current level only.
 - Shots use native ammunition and reloads. Terrain, vehicle motion and turret limits affect firing and accuracy. No ballistic lead prediction.
