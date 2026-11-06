@@ -1,0 +1,66 @@
+[h1]TABS Order Tablet[/h1]
+Plan routes. Assign targets. Coordinate your vehicles.
+
+Create action queues for TABS vehicles using a handheld tool. Combine driving, individual shots and moving fire, then launch several vehicle plans with independent start delays.
+
+[h2]IMPORTANT: Additional installation required[/h2]
+[b]Subscribing alone does not complete setup.[/b]
+Install the TABS bridge replacement from GitHub. The manual ZIP requires no Python.
+[url=https://github.com/swaggyp7/tabs-order-tablet/blob/main/docs/INSTALL.md]► Step-by-step installation guide[/url]
+[url=https://github.com/swaggyp7/tabs-order-tablet/releases/tag/v0.6.1]► Download mod + bridge ZIP[/url]
+
+[h2]Features[/h2]
+[list]
+[*]Mix movement and shooting in one queue.
+[*]Attack a target while driving toward a waypoint.
+[*]Choose weapons and ammunition for each firing instruction.
+[*]Track the clicked point on moving bodies.
+[*]Keep independent plans for multiple vehicles.
+[*]Start all prepared plans together with F8.
+[*]Set each vehicle's start delay: 3, 5, 7 or 10 seconds.
+[*]Compact HUD with expandable controls.
+[/list]
+
+[h2]Installation[/h2]
+[list]
+[*]Subscribe to this mod and TABS Vehicle Framework, including its required items.
+[*]Close Teardown. Download TABS-Order-Tablet-v0.6.1.zip from the release Assets and extract it.
+[*]Locate SteamLibrary/steamapps/workshop/content/1167630/3148138736/ and back up your original main.lua.
+[*]Verify that your original file matches the supported SHA256 in INSTALL.txt. Copy TABS-bridge/main.lua from the ZIP over main.lua in that TABS directory.
+[*]Start Teardown, enable both mods, reload a level and equip the tool in group 6.
+[/list]
+[b]Replace the file inside TABS Vehicle Framework, not inside this tool mod.[/b]
+For the ZIP's local tool instead of Workshop, put tabs-vehicle-recorder in Documents/Teardown/mods. Enable only one copy.
+
+[h2]Controls[/h2]
+[list]
+[*]LMB — Select a vehicle / add an instruction.
+[*]Q — Route / Single shot / Moving fire target.
+[*]Z / X — Weapon / ammunition in target modes.
+[*]F7 — Start selected plan.
+[*]F8 — Start all prepared plans.
+[*]F5 — Stop selected vehicle, including its countdown.
+[*]T — Start delay: 3 / 5 / 7 / 10 seconds; default 3.
+[*]R — Select another vehicle; retain the previous plan.
+[*]Backspace / Delete — Undo last / clear selected plan.
+[*]G — Cancel pending moving-fire target.
+[*]H — Expand / hide full controls.
+[/list]
+[b]Moving fire:[/b] Switch to Moving fire target mode, choose weapon/ammo and click the target. The tool returns to Route mode. Click the ground for that segment's endpoint. Firing ends at the waypoint; assign a target separately for each segment.
+
+[h2]Compatibility and limitations[/h2]
+[list]
+[*]Single player; requires the TABS version supported by the bridge.
+[*]Entering the executing vehicle stops its plan. Entering another vehicle does not.
+[*]Plans last for the current level. F8 does not restart running plans.
+[*]Native ammunition and reloads are used. Turret limits, terrain and vehicle motion affect firing and accuracy. No ballistic lead prediction.
+[*]TABS updates may overwrite the bridge or require a new release.
+[*]Patches replacing the same main.lua, including TABS Hit Replay, cannot simply be installed over this replacement. This ZIP does not contain a combined patch.
+[/list]
+To uninstall, close the game, restore your own main.lua backup and disable this tool.
+
+[h2]Links[/h2]
+[url=https://github.com/swaggyp7/tabs-order-tablet]► GitHub project[/url]
+[url=https://github.com/swaggyp7/tabs-order-tablet/releases/tag/v0.6.1]► Mod + bridge download[/url]
+[url=https://github.com/swaggyp7/tabs-order-tablet/blob/main/docs/INSTALL.md]► Installation guide[/url]
+[url=https://steamcommunity.com/sharedfiles/filedetails/?id=3148138736]► TABS Vehicle Framework — required[/url]
