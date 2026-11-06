@@ -10,7 +10,7 @@ Plan vehicle action sequences with a handheld tool: drive, fire, fire on the mov
 
 ## Requirements and installation
 
-Single-player Teardown with TABS Vehicle Framework (Workshop 3148138736). **Enabling this tool alone does not install the bridge.** This distribution includes a Python installer that adds a bounded bridge to your local TABS main.lua and preserves a verified backup. The game and TABS files are not redistributed.
+Single-player Teardown with TABS Vehicle Framework (Workshop 3148138736). **Enabling this tool alone does not install the bridge.** This distribution includes a Python installer that adds a bounded bridge to your local TABS main.lua and preserves a verified backup. The manual release ZIP includes a version-specific replacement main.lua; see MANUAL-INSTALL.txt in the archive. The source installer remains available separately.
 
 1. Extract the full archive. Install Python 3 if needed.
 2. Run `python tools/deploy_vehicle_recorder.py` from the extracted folder. Default TABS path: `D:/Steam/steamapps/workshop/content/1167630/3148138736`. Use `--target "YOUR_TABS_FOLDER"` to change it; `--help` lists other options.
@@ -27,3 +27,7 @@ Moving fire ends at its waypoint. Each segment needs its own target. Live script
 ## Release verification
 
 Installer preservation/rollback and simulated route, moving-fire, launch-delay and fleet-start checks pass. Actual HUD rendering and physical driving accuracy must be checked in Teardown before publication. The preview is the supplied in-game screenshot, unchanged.
+
+## Manual replacement ZIP (v0.6.1)
+
+The release asset includes both the mod folder and `TABS-bridge/main.lua`. Follow the root `INSTALL.txt`; this route needs no Python. Use only one installation method. Compare the original TABS main.lua SHA256 before replacing it and preserve your own backup. The bundled main.lua excludes unrelated local patches.
