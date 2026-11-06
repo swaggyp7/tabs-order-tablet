@@ -1,33 +1,12 @@
-# TABS Fusion v6
+# TABS Fusion
 
-启用 TABS Fusion 和 TABS Vehicle Framework，重载单人地图，从工具第 6 组拿出工具。
+**English** | [简体中文](https://github.com/swaggyp7/tabs-order-tablet/blob/main/docs/zh-CN/USAGE.md)
 
-- 左键选择 TABS 载具。
-- Q 依次切换路径、停车射击、移动射击目标模式。
-- 路径模式：左键地面，追加移动终点。
-- 停车射击模式：Z 选武器、X 选弹种，左键目标，追加一次停车射击。
-- 移动射击目标模式：Z/X 选武器/弹种，左键选目标，自动返回路径模式；再左键地面，追加一条“移动到该点，同时持续攻击刚才目标”的指令。目标只附带在这一条移动指令上。选目标后可按 G 取消，再添加普通移动点。
-- F7 启动当前选择车辆；F8 同时启动所有已编排且至少有一条指令的有效车辆。正在运行或等待的脚本不会被重新启动。
-- 选中车辆后按 T 设置该车启动延迟，循环 3 / 5 / 7 / 10 秒，默认 3 秒；执行中不可修改。F7 和 F8 都遵守各车延迟，倒计时结束执行首条命令。HUD 显示剩余时间，等待期间保持制动、不瞄准开火。
-- F5 停止当前选择车辆，包括正在倒计时的车辆。Backspace 撤销末条，Delete 清空当前车辆指令（保留延迟设置）。
-- R 重新选车并保留当前计划。每辆车的计划和运行状态独立；上其他车辆不会中止，亲自驾驶执行中的车辆会中止该车计划。
+A handheld route and fire-order planner for TABS vehicles.
 
-例如：普通移动到 A → 停车射击甲 → 移动到 B 并持续攻击乙 → 普通移动到 C。
+- [Installation](https://github.com/swaggyp7/tabs-order-tablet/blob/main/docs/INSTALL.md)
+- [Hit Replay compatibility](https://github.com/swaggyp7/tabs-order-tablet/blob/main/docs/HIT-REPLAY.md)
+- [Full controls and queue behavior](https://github.com/swaggyp7/tabs-order-tablet/blob/main/docs/USAGE.md)
+- [Download v0.6.3](https://github.com/swaggyp7/tabs-order-tablet/releases/tag/v0.6.3)
 
-移动射击的目标选择本身不占队列条目，必须再设置路径终点；队列显示 MOVE+FIRE，橙线连接路径终点和攻击目标。到达终点立即结束该段射击，即使未开出一炮也继续下一条。需要连续多段攻击时，为各段分别选择目标。
-
-车辆通过原版车轮行驶，射击消耗实际弹药，遵循原武器装填和射速。动态目标跟随点击部位，静态目标保存世界坐标。仅当炮口对准目标时开火，行驶颠簸、炮塔转速和射界会影响能否开火及命中。当前不做弹道提前量预测。车辆卡住、目标消失、武器损坏或弹药不足时停止该车计划。
-
-## 安装
-
-从 [Release](https://github.com/swaggyp7/tabs-order-tablet/releases/tag/v0.6.3) 的 Assets 下载 TABS-Fusion-v0.6.3.zip，按 INSTALL.txt 安装。退出游戏，备份并核对 TABS 原版 main.lua 的哈希后，将包中的 TABS-bridge/main.lua 替换到 TABS 框架目录。已订阅工具的玩家无需再复制 ZIP 内的工具本体；使用本地版则将 tabs-vehicle-recorder 放入 Documents/Teardown/mods。只启用一个工具版本。
-
-完整步骤：[中英文安装教程](../docs/INSTALL.md)。普通版不能直接叠加 Hit Replay 等同文件替换补丁；同时使用请按下方兼容版教程安装。卸载时恢复自己的安装前备份。
-
-第一人称工具每帧使用显式相机空间姿势，棒身放在右下角并向外偏转；第三人称使用 prefab 持握挂点。最终可见范围需在游戏中确认。
-
-界面：左下角显示当前车辆、模式、延迟和最多三条队列。H 展开完整快捷键。界面按屏幕大小自动缩放；长武器名会裁切，完整名称仍保存在武器目录。
-
-## Hit Replay 兼容版
-
-同时使用回放时下载 TABS-Fusion-Hit-Replay-v0.6.3.zip，按 docs/HIT-REPLAY.md 教程同时替换 main.lua 与 TABS/scripts/ballistics.lua。检测到回放桥接后 Fusion 全部执行自动改为 F6，Hit Replay 保留 F8/F9/F10。勿叠加双方独立替换包。
+Equip the tool in group 6 after installing the matching bridge. The ordinary bridge uses F8 to start all plans; the combined Hit Replay bridge uses F6. Press H for controls.

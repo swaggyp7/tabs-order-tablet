@@ -1,51 +1,53 @@
-# TABS Fusion 安装教程 / Installation
+# TABS Fusion installation
 
-[GitHub 项目](https://github.com/swaggyp7/tabs-order-tablet) · [下载 v0.6.3](https://github.com/swaggyp7/tabs-order-tablet/releases/tag/v0.6.3)
+**English** | [简体中文](zh-CN/INSTALL.md)
 
-同时使用 Hit Replay？请下载 **TABS-Fusion-Hit-Replay-v0.6.3.zip**，按 **[兼容版教程](HIT-REPLAY.md)** 同时替换两个文件。下方步骤用于 Fusion 普通版。
+[Download v0.6.3](https://github.com/swaggyp7/tabs-order-tablet/releases/tag/v0.6.3) · [Project home](../README.md)
 
-Using Hit Replay? Follow the [combined installation guide](HIT-REPLAY.md) instead.
+Using Hit Replay as well? Download **TABS-Fusion-Hit-Replay-v0.6.3.zip** and follow the [combined installation guide](HIT-REPLAY.md). The steps below are for Fusion alone.
 
-## 中文
+## Requirements
 
-需要单人游戏、[TABS Vehicle Framework](https://steamcommunity.com/sharedfiles/filedetails/?id=3148138736) 及其必需项目。订阅指令板后，还需要安装桥接替换文件。
+Single-player Teardown, [TABS Vehicle Framework](https://steamcommunity.com/sharedfiles/filedetails/?id=3148138736), and its required Workshop items. Subscribing to the Fusion tool alone does not install the bridge.
 
-1. **退出 Teardown**。打开上述 Release，从 **Assets** 下载 **TABS-Fusion-v0.6.3.zip**，不要下载 Source code。
-2. 解压后确认有 `TABS-bridge/main.lua`、`tabs-vehicle-recorder/`、`INSTALL.txt` 和 `checksums.json`。
-3. 找到安装 TABS 的 Steam 库，进入 `steamapps/workshop/content/1167630/3148138736/`。这个目录应已存在 `main.lua`，不是游戏 data 目录，也不是指令板模组目录。
-4. 备份你自己的原始 `main.lua`。核对原文件 SHA256 是否匹配下方数值；不匹配表示不同版本或已有补丁，勿直接覆盖。
-5. 将 ZIP 中的 `TABS-bridge/main.lua` 复制到上述 TABS 目录，替换同名文件。无需替换 `ballistics.lua`。
-6. 工具本体二选一：使用工坊订阅版本；或将 ZIP 中的 `tabs-vehicle-recorder` 整个文件夹放入 `Documents/Teardown/mods/`。只启用一个版本。
-7. 启动游戏，启用 TABS 和 TABS Fusion，重新进入单人地图，在工具第 6 组找到工具。按 H 展开完整按键。
+## Install the ordinary version
 
-适配的原版 main.lua SHA256：
+1. **Close Teardown.** Download **TABS-Fusion-v0.6.3.zip** from the release's **Assets**, not the automatically generated Source code archive.
+2. Extract it. The ZIP contains `TABS-bridge/main.lua`, `tabs-vehicle-recorder/`, `INSTALL.txt` and `checksums.json`.
+3. Find your TABS framework folder in the Steam library where it is installed:
+
+   ```text
+   SteamLibrary/steamapps/workshop/content/1167630/3148138736/
+   ```
+
+4. Back up your own original `main.lua` outside that folder. Verify its SHA256 against the value below. A mismatch means another version or existing modifications; do not overwrite it with this replacement.
+5. Copy the ZIP's **`TABS-bridge/main.lua`** over **`main.lua` in the TABS framework folder**. No ballistics.lua replacement is needed for the ordinary version.
+6. Use either the subscribed Workshop tool or the ZIP's local copy. For the local copy, put the entire `tabs-vehicle-recorder` folder in `Documents/Teardown/mods/`. Enable only one copy.
+7. Enable TABS and TABS Fusion, reload a single-player level, and equip the tool in **group 6**. Press **H** to see all controls.
+
+The bridge replaces a file inside **TABS Vehicle Framework**, not inside the Fusion tool directory.
+
+## Supported original file
+
+Original main.lua SHA256:
 
 ```text
 84dc0a005180e8c83accbe7aad6cc9548d985912b6070c4c3a6033c04bda4994
 ```
 
-可使用 PowerShell 的 `Get-FileHash -Algorithm SHA256 -LiteralPath "你的TABS目录/main.lua"` 检查。
+Check with PowerShell, replacing the example path:
 
-### 第一次使用
+```powershell
+Get-FileHash -Algorithm SHA256 -LiteralPath "YOUR_TABS_FOLDER/main.lua"
+```
 
-左键选车，路径模式左键设置终点。Q 切换目标模式，Z/X 选武器和弹种，左键添加射击。移动射击模式下先选目标，再点地面设置这一段的终点。T 设置该车启动延迟，F7 启动该车，F8 启动所有已编排车辆，F5 停止当前车。
+## First use
 
-### 冲突、更新与卸载
+Click a vehicle, then add ground waypoints. Q cycles Route / Single shot / Moving fire target; Z/X choose weapon/ammo in target modes. For moving fire, select a target, then the segment's endpoint. T changes the selected vehicle's delay; F7 starts it, F8 starts all prepared plans, and F5 stops the selected vehicle. See the [full user guide](USAGE.md).
 
-- 普通 ZIP 不包含 Hit Replay 合并补丁；同时使用请改用[兼容 ZIP](HIT-REPLAY.md)，不要叠加独立替换包。
-- TABS 更新可能覆盖补丁，需重新确认版本兼容性。
-- 卸载时退出游戏，恢复**你自己安装前备份的** main.lua，再禁用指令板。
-- 如果提示未连接，检查是否替换了正确 Steam 库中 TABS 根目录的 main.lua，确认 TABS 已启用，并重新载入地图。
+## Updating, conflicts and uninstalling
 
-## English
-
-Requires single-player Teardown, TABS Vehicle Framework and its required items. A tool subscription alone does not complete setup.
-
-1. Close Teardown. Download **TABS-Fusion-v0.6.3.zip** from the release **Assets**, not Source code.
-2. Extract it. Locate `SteamLibrary/steamapps/workshop/content/1167630/3148138736/`.
-3. Back up your original main.lua and compare its SHA256 with the supported value above. A different hash means another version or existing modifications; do not overwrite it with this replacement.
-4. Copy the ZIP's `TABS-bridge/main.lua` over main.lua in that TABS folder. No ballistics.lua replacement is needed.
-5. Use either the Workshop tool or the local ZIP copy. For the local copy, place the entire tabs-vehicle-recorder folder in Documents/Teardown/mods. Enable only one copy.
-6. Enable TABS and TABS Fusion, reload a single-player level, and equip the tool in group 6. Press H for controls.
-
-The ordinary ZIP does not combine the Hit Replay bridge; use the separate combined ZIP for both mods. Patches replacing the same main.lua overwrite each other. TABS updates may overwrite the bridge or change compatibility. Restore YOUR original backup to uninstall, then disable the tool.
+- For Hit Replay, use the [combined ZIP and guide](HIT-REPLAY.md). Do not stack standalone replacement packages.
+- TABS updates can overwrite the bridge or change compatibility. Check the supported version before reinstalling.
+- To uninstall, close the game, restore **your own pre-install main.lua backup**, and disable Fusion.
+- If the HUD reports no TABS connection, check the replacement path and Steam library, enable TABS, and reload the level.

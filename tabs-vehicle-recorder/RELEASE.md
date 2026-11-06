@@ -1,5 +1,7 @@
 # TABS Fusion
 
+**English** | [简体中文](https://github.com/swaggyp7/tabs-order-tablet/blob/main/docs/zh-CN/RELEASE.md)
+
 Plan vehicle action sequences with a handheld tool: drive, fire, fire on the move, and coordinate multiple vehicles with independent launch delays.
 
 - Native wheel movement and TABS weapons, with weapon/ammunition selection.
@@ -12,7 +14,7 @@ Plan vehicle action sequences with a handheld tool: drive, fire, fire on the mov
 
 Requires single-player Teardown, TABS Vehicle Framework (Workshop 3148138736) and its required items.
 
-Download **TABS-Fusion-v0.6.3.zip** from the [release Assets](https://github.com/swaggyp7/tabs-order-tablet/releases/tag/v0.6.3). Follow the archive's INSTALL.txt or the [中英文安装教程](../docs/INSTALL.md). Back up your original TABS main.lua and verify the supported SHA256 before replacing it with TABS-bridge/main.lua from the ZIP.
+Download **TABS-Fusion-v0.6.3.zip** from the [release Assets](https://github.com/swaggyp7/tabs-order-tablet/releases/tag/v0.6.3). Follow the archive's INSTALL.txt or the [installation guide](../docs/INSTALL.md). Back up your original TABS main.lua and verify the supported SHA256 before replacing it with TABS-bridge/main.lua from the ZIP.
 
 Use either the Workshop tool or the ZIP's local tool folder, not both. Enable TABS and Fusion, reload the level, and equip the tool in group 6. Restore your own original main.lua backup to uninstall. For Hit Replay, use TABS-Fusion-Hit-Replay-v0.6.3.zip and the combined guide in docs/HIT-REPLAY.md. Replace both main.lua and TABS/scripts/ballistics.lua. Fusion START ALL uses F6 with that bridge; Hit Replay retains F8/F9/F10. Do not stack standalone bridge packages.
 

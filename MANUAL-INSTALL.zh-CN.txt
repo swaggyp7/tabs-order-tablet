@@ -1,0 +1,19 @@
+TABS Fusion v0.6.3
+
+English: MANUAL-INSTALL.txt
+
+TABS FUSION v0.6.3 — 手动替换安装 / MANUAL INSTALL
+
+1. 退出游戏，备份你自己的 TABS main.lua。
+2. 将 tabs-vehicle-recorder 文件夹复制到 Documents/Teardown/mods/。
+3. 将 TABS-bridge/main.lua 复制到 Steam/steamapps/workshop/content/1167630/3148138736/main.lua，覆盖同名文件。
+4. 启动游戏，启用 TABS 和 TABS Fusion，重新载入地图。工具在第 6 组。
+
+适配范围：TABS Workshop 3148138736，原版 main.lua SHA256：
+84dc0a005180e8c83accbe7aad6cc9548d985912b6070c4c3a6033c04bda4994
+请用 PowerShell Get-FileHash -Algorithm SHA256 检查你自己的原文件。
+哈希不符时不要直接覆盖；可能是其他 TABS 版本或已有补丁。
+替换文件仅包含原版基础代码和指令板桥接，不包含 Hit Replay 或实验探针。
+卸载：关闭游戏，恢复你自己的 main.lua 备份，并禁用本 mod。
+Workshop 更新可能覆盖替换文件；先核对新版本兼容性再安装。
+

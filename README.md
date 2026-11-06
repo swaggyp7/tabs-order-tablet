@@ -1,8 +1,10 @@
 # TABS Fusion
 
+**English** | [简体中文](README.zh-CN.md)
+
 Plan routes, assign firing targets, and coordinate TABS vehicles with a handheld tool in Teardown.
 
-**[Download v0.6.3](https://github.com/swaggyp7/tabs-order-tablet/releases/tag/v0.6.3)** · **[安装教程 / Installation guide](docs/INSTALL.md)** · [Workshop description](docs/WORKSHOP-DESCRIPTION.txt)
+**[Download v0.6.3](https://github.com/swaggyp7/tabs-order-tablet/releases/tag/v0.6.3)** · **[Installation guide](docs/INSTALL.md)** · [Workshop description](docs/WORKSHOP-DESCRIPTION.txt)
 
 ![Preview](tabs-vehicle-recorder/preview.jpg)
 
@@ -21,7 +23,7 @@ Plan routes, assign firing targets, and coordinate TABS vehicles with a handheld
 | Setup | ZIP | Guide |
 | --- | --- | --- |
 | Fusion only | TABS-Fusion-v0.6.3.zip | [Installation](docs/INSTALL.md) |
-| Fusion + Hit Replay | **TABS-Fusion-Hit-Replay-v0.6.3.zip** | **[兼容版教程 / Combined guide](docs/HIT-REPLAY.md)** |
+| Fusion + Hit Replay | **TABS-Fusion-Hit-Replay-v0.6.3.zip** | **[Combined guide](docs/HIT-REPLAY.md)** |
 
 The combined ZIP replaces both main.lua and TABS/scripts/ballistics.lua. Subscribe to the Hit Replay UI separately. Fusion START ALL uses **F6** with the replay bridge; Hit Replay keeps F8/F9/F10. Ordinary Fusion uses F8.
 
@@ -43,7 +45,7 @@ Requires **single-player Teardown**, [TABS Vehicle Framework](https://steamcommu
 
 **Replace the file inside TABS Vehicle Framework, not inside the Fusion mod folder.** The local folder name `tabs-vehicle-recorder` is retained for compatibility; its in-game name is TABS Fusion.
 
-中文完整步骤见 **[安装教程](docs/INSTALL.md#中文)**。
+See the [complete user guide](docs/USAGE.md) for queue behavior and controls.
 
 ### What is in the ZIP?
 

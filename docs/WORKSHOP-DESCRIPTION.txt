@@ -1,3 +1,5 @@
+[url=https://github.com/swaggyp7/tabs-order-tablet/blob/main/docs/zh-CN/WORKSHOP-DESCRIPTION.txt]简体中文[/url]
+
 [h1]TABS Fusion[/h1]
 Plan routes. Assign targets. Coordinate your vehicles.
 

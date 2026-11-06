@@ -1,0 +1,62 @@
+[url=https://github.com/swaggyp7/tabs-order-tablet/blob/main/docs/WORKSHOP-DESCRIPTION.txt]English[/url]
+
+[h1]TABS Fusion[/h1]
+编排行进路线，指定射击目标，让多辆载具协同执行。
+
+使用手持工具为 TABS 载具创建动作队列，自由组合移动、停车射击和移动射击，选择武器与弹种，并用独立启动延迟协调多辆车。
+
+[h2]安装要求[/h2]
+[b]仅订阅工具还需要安装 TABS 桥接替换文件。[/b]
+[url=https://github.com/swaggyp7/tabs-order-tablet/releases/tag/v0.6.3]► 下载 mod 与桥接替换包[/url]
+[url=https://github.com/swaggyp7/tabs-order-tablet/blob/main/docs/zh-CN/INSTALL.md]► 普通版安装教程[/url]
+[url=https://github.com/swaggyp7/tabs-order-tablet/blob/main/docs/zh-CN/HIT-REPLAY.md]► Hit Replay 兼容版教程[/url]
+
+[h2]功能[/h2]
+[list]
+[*]在同一队列中组合移动、停车射击和移动射击。
+[*]每条射击指令可选择武器和弹种。
+[*]跟踪动态物体上点击的目标部位。
+[*]多辆车独立编排，支持统一启动。
+[*]每车可设置 3、5、7、10 秒启动延迟。
+[*]紧凑界面，H 展开完整按键。
+[/list]
+
+[h2]安装[/h2]
+[list]
+[*]订阅本模组、TABS Vehicle Framework 及其必需项目。兼容回放时另需订阅 TABS Hit Replay。
+[*]退出游戏，从 GitHub Release 下载普通 ZIP 或 Hit Replay 兼容 ZIP。
+[*]找到 SteamLibrary/steamapps/workshop/content/1167630/3148138736/，备份自己的原文件并核对包内哈希。
+[*]普通版替换 main.lua；兼容版同时替换 main.lua 和 TABS/scripts/ballistics.lua，保留目录结构。
+[*]启用模组并重载单人地图，从工具第 6 组拿出 Fusion。
+[/list]
+[b]替换的是 TABS 框架文件，不是 Fusion 工具目录内的文件。[/b]
+已订阅工坊工具无需再安装 ZIP 本地副本；使用本地版则将 tabs-vehicle-recorder 放入 Documents/Teardown/mods。只启用一个工具副本。兼容 ZIP 不含 Hit Replay 界面本体。
+
+[h2]按键[/h2]
+[list]
+[*]左键：选车或添加指令。
+[*]Q：路径、停车射击、移动射击目标模式。
+[*]Z / X：目标模式下选择武器和弹种。
+[*]F7：执行当前车；F5：停止当前车，包括倒计时。
+[*]F8：全部执行；检测到回放桥接后改为 F6。
+[*]T：循环选择 3 / 5 / 7 / 10 秒延迟，默认 3 秒。
+[*]R：重新选车并保留已有计划。
+[*]Backspace / Delete：撤销末条或清空当前车指令。
+[*]G：取消待设置终点的移动射击目标。
+[*]H：展开或收起操作提示。
+[/list]
+移动射击先选目标，再点击地面设置该段终点。到达后结束射击，每段需单独设置目标。Hit Replay 保留 F8/F9/F10；Backspace 也会关闭当前回放叠层。
+
+[h2]兼容性与限制[/h2]
+[list]
+[*]仅单人游戏，需要与替换包适配的 TABS 版本。
+[*]使用 Hit Replay 时请选择合并兼容包，不要叠加双方独立替换文件。
+[*]亲自进入执行中的车辆会停止该车计划，进入其他车辆不会。
+[*]计划只保留在当前关卡，已运行的计划不会因全部执行而重启。
+[*]使用原生弹药与装填，车体运动、地形和炮塔射界影响开火与命中，不做弹道提前量预测。
+[*]TABS 更新可能覆盖桥接或改变兼容性。
+[/list]
+卸载时退出游戏，恢复自己安装前备份的框架文件并禁用工具。
+
+[url=https://github.com/swaggyp7/tabs-order-tablet]► GitHub 项目[/url]
+[url=https://github.com/swaggyp7/tabs-order-tablet/blob/main/README.zh-CN.md]► 中文文档首页[/url]

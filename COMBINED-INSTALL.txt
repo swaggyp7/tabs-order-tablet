@@ -1,26 +1,63 @@
-TABS Fusion + Hit Replay v0.6.3
+TABS Fusion v0.6.3
 
-中文教程：https://github.com/swaggyp7/tabs-order-tablet/blob/main/docs/HIT-REPLAY.md
+English | 简体中文: INSTALL.zh-CN.txt (inside the ZIP)
+Online Chinese guide: https://github.com/swaggyp7/tabs-order-tablet/blob/main/docs/zh-CN/HIT-REPLAY.md
 
-订阅并启用 TABS Vehicle Framework、TABS Fusion 和 TABS Hit Replay。
-1. 退出游戏。备份 TABS 目录中的 main.lua 和 TABS/scripts/ballistics.lua。
-2. 本包使用的原版基础文件 SHA256：
-main.lua: 84dc0a005180e8c83accbe7aad6cc9548d985912b6070c4c3a6033c04bda4994
-TABS/scripts/ballistics.lua: 9536edc20189cadd5c0f91c1c77a5820a5062772e7223a8f242fa2a6aac599f2
-已安装支持版本补丁时，可对照 checksums.json 中的 supported_hit_replay_*、supported_fusion_main_sha256 和对应输出文件哈希。其他版本或未知修改请勿覆盖。
-3. 将 TABS-bridge 文件夹里的内容复制进 SteamLibrary/steamapps/workshop/content/1167630/3148138736/，保持目录结构，替换两个文件：
-   TABS-bridge/main.lua -> 3148138736/main.lua
-   TABS-bridge/TABS/scripts/ballistics.lua -> 3148138736/TABS/scripts/ballistics.lua
-4. 工坊已订阅 Fusion 时不用再装本地副本；否则复制 tabs-vehicle-recorder 到 Documents/Teardown/mods。Hit Replay 界面需单独订阅，本 ZIP 不含其工具本体。
-5. 启用三个模组，重新进入单人地图。
-6. Fusion 检测到回放桥接后，使用 F6 全部执行；F7 当前车、F5 停止当前车。Hit Replay 保留 F8 开关、F9 重播、F10 目标模式。工具界面会显示 F6。Backspace 撤销指令时也会关闭当前回放叠层。
+[Download v0.6.3](https://github.com/swaggyp7/tabs-order-tablet/releases/tag/v0.6.3) · [Project home](../README.md)
 
-本包已合并桥接。不要再用 Fusion 普通版或独立 Hit Replay 替换包覆盖其中一个文件。
-从普通版升级应同时替换两个文件。卸载或还原时恢复你自己备份的两个文件；备份若已有某个补丁，恢复后会回到该补丁状态。
-TABS 更新后需重新检查兼容性。
+## Choose the correct ZIP
 
-ENGLISH
-Subscribe to TABS Vehicle Framework, TABS Fusion and TABS Hit Replay. Close Teardown and back up BOTH main.lua and TABS/scripts/ballistics.lua in the TABS framework directory. Verify compatibility using checksums.json. Copy the CONTENTS of TABS-bridge into SteamLibrary/steamapps/workshop/content/1167630/3148138736/, preserving subdirectories and replacing both files.
-Use either the Workshop Fusion tool or the included local tool folder, not both. The Hit Replay UI must be subscribed separately. Enable all three mods and reload a single-player level.
-Fusion uses F6 for START ALL when the replay bridge is detected. F7 starts selected; F5 stops selected. Hit Replay keeps F8 toggle, F9 replay, F10 target mode. Backspace also dismisses the active replay overlay.
-Do not apply standalone bridge replacements on top of this combined pair. To uninstall, restore YOUR backups of BOTH files. Recheck compatibility after TABS updates.
+| Setup | ZIP | TABS files replaced |
+| --- | --- | --- |
+| Fusion only | TABS-Fusion-v0.6.3.zip | main.lua |
+| Fusion + Hit Replay | **TABS-Fusion-Hit-Replay-v0.6.3.zip** | **main.lua and TABS/scripts/ballistics.lua** |
+
+Choose one package. The combined pair already includes both bridges; do not overwrite it with either standalone bridge.
+
+## Install the combined version
+
+1. Subscribe to [TABS Vehicle Framework](https://steamcommunity.com/sharedfiles/filedetails/?id=3148138736), TABS Fusion, [TABS Hit Replay](https://steamcommunity.com/sharedfiles/filedetails/?id=3818578313), and their required items.
+2. Close Teardown. Download **TABS-Fusion-Hit-Replay-v0.6.3.zip** from the release Assets and extract it.
+3. Locate `SteamLibrary/steamapps/workshop/content/1167630/3148138736/`. Back up **both main.lua and TABS/scripts/ballistics.lua** outside the framework directory.
+4. Verify compatibility against INSTALL.txt and checksums.json. Native file hashes are below. Supported already-patched Hit Replay and Fusion file hashes are also recorded in checksums.json. Do not overwrite unknown modifications or a different TABS version.
+5. Copy the files using these exact destinations, preserving subdirectories:
+
+   | ZIP file | Destination within the TABS framework folder |
+   | --- | --- |
+   | TABS-bridge/main.lua | main.lua |
+   | TABS-bridge/TABS/scripts/ballistics.lua | TABS/scripts/ballistics.lua |
+
+6. Use either the Workshop Fusion tool or the included local `tabs-vehicle-recorder` folder in `Documents/Teardown/mods/`, not both. **The Hit Replay UI is not included in this ZIP; subscribe to it separately.**
+7. Enable TABS, Fusion and Hit Replay, then reload a single-player level.
+
+When upgrading from ordinary Fusion or a supported Hit Replay installation, replace **both** files, not only main.lua.
+
+## Controls
+
+| Function | Key |
+| --- | --- |
+| Fusion: start all prepared plans | **F6**, automatically selected when the replay bridge is detected |
+| Fusion: start selected / stop selected | F7 / F5 |
+| Hit Replay: toggle / replay / target mode | F8 / F9 / F10 |
+
+Fusion's HUD shows the active key. The ordinary bridge uses F8. With the combined bridge installed, Fusion still uses F6 even if the Hit Replay UI mod is disabled. Backspace also dismisses the active replay overlay when undoing a Fusion instruction.
+
+## Supported original files
+
+main.lua SHA256:
+
+```text
+84dc0a005180e8c83accbe7aad6cc9548d985912b6070c4c3a6033c04bda4994
+```
+
+TABS/scripts/ballistics.lua SHA256:
+
+```text
+9536edc20189cadd5c0f91c1c77a5820a5062772e7223a8f242fa2a6aac599f2
+```
+
+Use PowerShell `Get-FileHash -Algorithm SHA256 -LiteralPath "FILE_PATH"` to check each file.
+
+## Updates and restoring your installation
+
+Close the game and restore **both of your own backups** to return to the previous state. If those backups already contained a patch, restoring them returns to that patched state. TABS updates can overwrite the bridge or change compatibility; verify the version before reinstalling. See the [user guide](USAGE.md) for queue and moving-fire behavior.

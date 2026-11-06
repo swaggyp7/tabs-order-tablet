@@ -36,6 +36,12 @@ else:
  instructions=ROOT/'MANUAL-INSTALL.txt'
 assert bridge.count(b'-- BEGIN TABS VEHICLE RECORDER v1')==1
 files.update({'TABS-bridge/main.lua':bridge,'INSTALL.txt':instructions.read_bytes()})
+files['INSTALL.zh-CN.txt']=instructions.with_name(instructions.stem+'.zh-CN.txt').read_bytes()
+for name in ('README.md','README.zh-CN.md'):
+ files[name]=(ROOT/name).read_bytes()
+for document in (ROOT/'docs').rglob('*'):
+ if document.is_file() and document.suffix in ('.md','.txt'):
+  files[document.relative_to(ROOT).as_posix()]=document.read_bytes()
 for n in (*ADDON_FILES,'README.md','RELEASE.md'): files['tabs-vehicle-recorder/'+n]=(src/n).read_bytes()
 manifest={'release':'v0.6.3','tabs_workshop_id':'3148138736','supported_native_main_sha256':BASE_SHA,'sha256':{n:hashlib.sha256(b).hexdigest() for n,b in files.items()}}
 manifest['variant']='fusion-hit-replay' if combined else 'fusion-only'
