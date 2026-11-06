@@ -1,0 +1,4 @@
+name = TABS No-Patch Probe
+author = Andrew
+description = Experimental event and native AI waypoint probe. Not the full order tablet. See README.
+tags = Gameplay
