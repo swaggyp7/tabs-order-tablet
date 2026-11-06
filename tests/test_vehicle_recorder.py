@@ -180,3 +180,23 @@ assert(GetFloat(a..'delay')==0 and GetFloat(b..'delay')==5)
 assert(toolPose.pos[1]>0 and toolPose.pos[2]<0 and handPose)
 """)
 print('PASS: F8 batches independent plans, four delay choices, countdown suppresses fire, cancel waiting and no restart')
+
+lua.execute("""
+-- The HUD remains balanced with countdowns, expanded controls and small screens.
+local depth=0; local text={}
+function UiPush() depth=depth+1 end
+function UiPop() depth=depth-1; assert(depth>=0) end
+function UiWidth() return 960 end
+function UiHeight() return 540 end
+function UiScale(s) assert(s>0 and s<=1) end
+function UiAlign() end
+function UiColor() end
+function UiTranslate() end
+function UiRect(w,h) assert(w<=500 and h<=400) end
+function UiWindow(w,h) assert(w>0 and h>0) end
+function UiFont() end
+function UiText(s) text[s]=true end
+draw(); assert(depth==0 and text['COUNTDOWN'] and text['F7  START      F8  START ALL      F5  STOP'])
+click('h'); draw(); assert(depth==0 and text['T  Start delay: 3 / 5 / 7 / 10 seconds'])
+""")
+print('PASS: compact HUD, expanded help and small-screen draw lifecycle')

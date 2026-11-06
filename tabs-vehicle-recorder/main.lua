@@ -9,6 +9,7 @@ local mode="move"
 local notice=""
 local attack=nil
 local pending=nil
+local showHelp=false
 local catalog=P.."catalog."
 local weapon,ammo=0,0
 local function loaded()
@@ -149,6 +150,7 @@ function tick()
         SetToolHandPoseLocalTransform(Transform(Vec(0,0,-0.05),QuatEuler(0,90,0)),nil)
     end
     if valid(vehicle) then markers() elseif vehicle~=0 then plans[vehicle]=nil; vehicle=0; steps={}; notice="Vehicle lost" end
+    if InputPressed("h") then showHelp=not showHelp end
     if pending then return end
     if InputPressed("f8") then executeAll(); return end
     if vehicle~=0 and InputPressed("r") then
@@ -175,33 +177,69 @@ function tick()
 end
 function draw()
     if not equipped() then return end
-    local running=GetBool(statusKey().."running")
-    UiPush(); UiTranslate(26,UiHeight()-265); UiFont("regular.ttf",17); UiAlign("left top")
-    UiColor(.03,.05,.07,.9); UiRect(980,245); UiTranslate(14,10); UiColor(1,1,1)
-    local function line(s) UiText(s); UiTranslate(0,25) end
-    line("TABS ORDER TABLET  v6  /  "..(running and "EXECUTING" or (vehicle==0 and "SELECT" or string.upper(mode))))
-    line(vehicle==0 and "LMB  Select vehicle" or "LMB  Add order      Q  Move / Fire / Moving fire      Backspace  Undo      R  Switch vehicle")
-    line("F7  Execute     F8  Execute all     F5  Stop selected     Del  Clear    |    Vehicle #"..vehicle.."    "..#steps.." orders")
-    if valid(vehicle) then line("T  Start delay: "..delays[plans[vehicle].delay or 1].." s") end
-    if mode~="move" and loaded() then
-        line("Z  Weapon: "..GetString(catalog..weapon..".name").."     X  Ammo: "..GetString(catalog..weapon.."."..ammo))
+    local selected=valid(vehicle)
+    local running=selected and GetBool(statusKey().."running")
+    local wait=running and GetFloat(statusKey().."delay") or 0
+    local index=GetInt(statusKey().."index")
+    local online=ready() and GetInt(P.."motionVersion")==6
+    local names={move="ROUTE",fire="SINGLE SHOT",movingfire="MOVING FIRE"}
+    local state=not online and "OFFLINE" or (wait>0 and "COUNTDOWN" or (running and "RUNNING" or (selected and names[mode] or "SELECT VEHICLE")))
+    local accent=not online and {1,.48,.3} or (running and {1,.72,.28} or {.28,.85,.7})
+    local scale=math.min(1,UiWidth()/1280,UiHeight()/720)
+    local height=showHelp and 398 or 298
+    UiPush(); UiTranslate(24,UiHeight()-24-height*scale); UiScale(scale); UiAlign("left top")
+    UiColor(.035,.05,.065,.94); UiRect(500,height)
+    UiColor(unpack(accent)); UiRect(3,height)
+    local function text(x,y,value,size,color,width)
+        UiPush(); UiTranslate(x,y); UiWindow(width or (480-x),size+7,true)
+        UiFont("regular.ttf",size); UiColor(unpack(color or {.88,.92,.94})); UiText(value); UiPop()
     end
-    local first=running and math.max(1,GetInt(statusKey().."index")-1) or math.max(1,#steps-5)
-    local labels={}
-    for i=first,math.min(#steps,first+5) do
-        local s=steps[i]
-        labels[#labels+1]=i.." "..(s.kind=="fire" and ("FIRE "..s.weapon.."/"..s.ammo) or (s.attack and "MOVE+FIRE" or "MOVE"))
+    local function rule(y)
+        UiPush(); UiTranslate(18,y); UiColor(1,1,1,.10); UiRect(464,1); UiPop()
     end
-    line(table.concat(labels,"   "))
-    local i=GetInt(statusKey().."index")
-    if attack then line("Next waypoint: MOVE + FIRE     G  Cancel target") end
+    text(18,14,"TABS / ORDER TABLET",19)
+    text(330,17,state,13,accent,152)
+    local fleet=0
+    for id,plan in pairs(plans) do if valid(id) and #plan.steps>0 then fleet=fleet+1 end end
+    text(18,44,selected and ("VEHICLE #"..vehicle.."   /   "..#steps.." ORDERS") or "Aim at a TABS vehicle and click to select",14,{.6,.67,.72})
+    text(18,66,selected and ("T  DELAY "..delays[plans[vehicle].delay or 1].."s    /    "..fleet.." VEHICLE PLANS") or (fleet.." vehicle plans ready   /   F8 to start all"),13,{.6,.67,.72})
+    rule(90)
+    local first=running and math.max(1,index) or math.max(1,#steps-2)
+    if #steps==0 then
+        text(18,106,selected and "No orders yet" or "Plan routes. Assign targets. Execute together.",16)
+        text(18,133,"LMB  Select / add     Q  Route / Shot / Moving fire",13,{.6,.67,.72})
+    else
+        for row=0,2 do
+            local n=first+row; local step=steps[n]
+            if step then
+                local label=step.kind=="fire" and "FIRE" or (step.attack and "MOVE + FIRE" or "MOVE")
+                local target=step.attack or step
+                if step.kind=="fire" or step.attack then label=label.."   W"..target.weapon.." / A"..target.ammo end
+                text(18,102+row*23,string.format("%03d",n),13,{.6,.67,.72},40)
+                text(65,100+row*23,label,15,(running and n==index) and accent or nil)
+            end
+        end
+    end
     local status=notice~="" and notice or GetString(statusKey().."message")
+    if attack then status="Target ready: click a waypoint  /  G cancel" end
     if running then
-        local wait=GetFloat(statusKey().."delay")
-        status=wait>0 and string.format("Starting in %.1f s",wait) or ("Executing order "..i)
-        if steps[i] and steps[i].kind=="move" then status=status..string.format("   %.1f m remaining",GetFloat(statusKey().."remaining")) end
+        status=wait>0 and string.format("Starting in %.1f seconds",wait) or ("Executing order "..index.." / "..#steps)
+        if wait<=0 and steps[index] and steps[index].kind=="move" then status=status..string.format("  /  %.1f m",GetFloat(statusKey().."remaining")) end
     end
-    if not ready() or GetInt(P.."motionVersion")~=6 then status="Reload the level to load the v6 TABS bridge" end
-    line(status)
+    if not online then status="TABS connection unavailable. Enable TABS and reload." end
+    text(18,178,status~="" and status or "Ready",13,accent)
+    if mode~="move" and loaded() then
+        text(18,202,"Z  "..GetString(catalog..weapon..".name").."    X  "..GetString(catalog..weapon.."."..ammo),13)
+    else text(18,202,"LMB  Add order     Q  Change mode     R  Select vehicle",13,{.6,.67,.72}) end
+    rule(228)
+    text(18,242,"F7  START      F8  START ALL      F5  STOP",15)
+    text(18,270,"H  "..(showHelp and "Hide controls" or "Show controls"),12,{.6,.67,.72})
+    if showHelp then
+        rule(294)
+        text(18,306,"Q  Route > Single shot > Moving fire target",13)
+        text(18,328,"Z / X  Weapon / Ammo     G  Cancel pending target",13)
+        text(18,350,"Backspace  Undo     Delete  Clear     R  Select vehicle",13)
+        text(18,372,"T  Start delay: 3 / 5 / 7 / 10 seconds",13)
+    end
     UiPop()
 end

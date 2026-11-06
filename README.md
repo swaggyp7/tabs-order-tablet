@@ -1,5 +1,9 @@
 # TABS Order Tablet
 
-Vehicle route and weapon order tool for Teardown / TABS.
+A handheld vehicle route and fire-order planner for Teardown / TABS. Supports moving fire, independent vehicle scripts, fleet execution and launch delays.
 
-See [usage](tabs-vehicle-recorder/README.md). Install: `python tools/deploy_vehicle_recorder.py`. The installer requires your local TABS Workshop installation and creates a backup; game and Workshop files are not included.
+![Preview](tabs-vehicle-recorder/preview.jpg)
+
+Read the [release and installation guide](tabs-vehicle-recorder/RELEASE.md) or [Chinese controls](tabs-vehicle-recorder/README.md). Install the bridge using `python tools/deploy_vehicle_recorder.py`. TABS Vehicle Framework and single-player Teardown are required; neither is included.
+
+The distribution must include the installer and the `tabs-vehicle-recorder` source directory. A Workshop tool-only upload requires users to obtain and run this installer separately.

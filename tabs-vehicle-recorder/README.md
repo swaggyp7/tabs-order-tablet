@@ -27,3 +27,5 @@
 需要 Python 和 Lupa（`pip install lupa`）。运行 `python tests/test_vehicle_recorder.py`、`python tests/test_vehicle_recorder_weapons.py`、`python tests/test_vehicle_recorder_install.py`。这些是模拟回调检查，不能替代游戏内实测。
 
 第一人称工具每帧使用显式相机空间姿势，棒身放在右下角并向外偏转；第三人称使用 prefab 持握挂点。最终可见范围需在游戏中确认。
+
+界面：左下角显示当前车辆、模式、延迟和最多三条队列。H 展开完整快捷键。界面按屏幕大小自动缩放；长武器名会裁切，完整名称仍保存在武器目录。

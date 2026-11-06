@@ -23,7 +23,7 @@ DEFAULT_BACKUP = ROOT / ".local-backups/tabs-vehicle-recorder"
 BEGIN = b"-- BEGIN TABS VEHICLE RECORDER v1"
 END = b"-- END TABS VEHICLE RECORDER v1"
 BRIDGE_FILES = ("core.lua", "weapons.lua", "bridge.lua")
-ADDON_FILES = ("main.lua", "options.lua", "info.txt", "tool.xml")
+ADDON_FILES = ("main.lua", "options.lua", "info.txt", "tool.xml", "preview.jpg")
 
 
 def digest(data: bytes) -> str:

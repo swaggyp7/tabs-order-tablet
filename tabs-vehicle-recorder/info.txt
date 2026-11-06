@@ -1,4 +1,4 @@
 name = TABS Order Tablet
 author = Andrew
-description = Equip the order tablet in tool group 6. Click a TABS vehicle and add movement and fire orders in sequence. Q switches mode, F7 executes and F5 stops. Requires the local TABS framework bridge. Single player.
+description = Plan routes, single shots and moving fire for TABS vehicles. Execute independent vehicle scripts together with configurable launch delays. Tool group 6. Single player; requires TABS Vehicle Framework and the included bridge installer. See README.md for setup.
 tags = Gameplay
