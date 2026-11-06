@@ -1,4 +1,4 @@
-# TABS Order Tablet
+# TABS Fusion
 
 Plan vehicle action sequences with a handheld tool: drive, fire, fire on the move, and coordinate multiple vehicles with independent launch delays.
 
@@ -14,7 +14,7 @@ Single-player Teardown with TABS Vehicle Framework (Workshop 3148138736). **Enab
 
 1. Extract the full archive. Install Python 3 if needed.
 2. Run `python tools/deploy_vehicle_recorder.py` from the extracted folder. Default TABS path: `D:/Steam/steamapps/workshop/content/1167630/3148138736`. Use `--target "YOUR_TABS_FOLDER"` to change it; `--help` lists other options.
-3. Enable TABS Order Tablet and TABS; reload the level. Equip the tool in group 6.
+3. Enable TABS Fusion and TABS; reload the level. Equip the tool in group 6.
 
 Keep the installer backup folder. Before TABS is updated or patched with another installer, restore using `python tools/deploy_vehicle_recorder.py --uninstall`, then update and reinstall. If Workshop changes the source, this installer refuses to overwrite the changed file; keep the backup and resolve the update before reinstalling.
 
@@ -28,6 +28,6 @@ Moving fire ends at its waypoint. Each segment needs its own target. Live script
 
 Installer preservation/rollback and simulated route, moving-fire, launch-delay and fleet-start checks pass. Actual HUD rendering and physical driving accuracy must be checked in Teardown before publication. The preview is the supplied in-game screenshot, unchanged.
 
-## Manual replacement ZIP (v0.6.1)
+## Manual replacement ZIP (v0.6.2)
 
 The release asset includes both the mod folder and `TABS-bridge/main.lua`. Follow the root `INSTALL.txt`; this route needs no Python. Use only one installation method. Compare the original TABS main.lua SHA256 before replacing it and preserve your own backup. The bundled main.lua excludes unrelated local patches.

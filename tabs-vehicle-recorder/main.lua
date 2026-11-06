@@ -135,7 +135,7 @@ local function markers()
     end
 end
 function init()
-    RegisterTool(TOOL,"TABS Order Tablet","MOD/tool.xml",6)
+    RegisterTool(TOOL,"TABS Fusion","MOD/tool.xml",6)
     SetBool("game.tool."..TOOL..".enabled",true)
 end
 function tick()
@@ -197,7 +197,7 @@ function draw()
     local function rule(y)
         UiPush(); UiTranslate(18,y); UiColor(1,1,1,.10); UiRect(464,1); UiPop()
     end
-    text(18,14,"TABS / ORDER TABLET",19)
+    text(18,14,"TABS / FUSION",19)
     text(330,17,state,13,accent,152)
     local fleet=0
     for id,plan in pairs(plans) do if valid(id) and #plan.steps>0 then fleet=fleet+1 end end

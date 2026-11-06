@@ -1,6 +1,6 @@
 function draw()
     UiPush(); UiTranslate(UiCenter(),UiMiddle()-200); UiAlign("center top"); UiFont("regular.ttf",24)
-    UiText("TABS ORDER TABLET"); UiTranslate(0,45); UiFont("regular.ttf",19)
+    UiText("TABS FUSION"); UiTranslate(0,45); UiFont("regular.ttf",19)
     local function line(s) UiText(s); UiTranslate(0,32) end
     line("LMB  Select vehicle / Add order")
     line("Q  Route / Single shot / Moving fire target")

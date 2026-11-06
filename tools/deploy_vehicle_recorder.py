@@ -193,10 +193,10 @@ def deploy(destination=DEFAULT_DESTINATION, target=DEFAULT_TARGET,
             raise RuntimeError("Backup manifest changed while preparing installation")
     if not check:
         transaction(changes, before)
-    print("CHECK OK; no files changed." if check else "Installed TABS Order Tablet.")
+    print("CHECK OK; no files changed." if check else "Installed TABS Fusion.")
     print("Addon:", destination)
     print("Exact-byte framework backup:", backup / "main.lua")
-    print("Enable TABS Order Tablet and TABS, then reload the level.")
+    print("Enable TABS Fusion and TABS, then reload the level.")
     print("Before using another TABS patch updater, uninstall this bridge first.")
     return state
 

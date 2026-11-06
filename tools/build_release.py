@@ -12,7 +12,7 @@ bridge=patched(base,[(src/n).read_bytes() for n in BRIDGE_FILES])
 assert b'WTRWire=' not in bridge and bridge.count(b'-- BEGIN TABS VEHICLE RECORDER v1')==1
 files={'TABS-bridge/main.lua':bridge,'INSTALL.txt':(ROOT/'MANUAL-INSTALL.txt').read_bytes()}
 for n in (*ADDON_FILES,'README.md','RELEASE.md'): files['tabs-vehicle-recorder/'+n]=(src/n).read_bytes()
-manifest={'release':'v0.6.1','tabs_workshop_id':'3148138736','supported_native_main_sha256':BASE_SHA,'sha256':{n:hashlib.sha256(b).hexdigest() for n,b in files.items()}}
+manifest={'release':'v0.6.2','tabs_workshop_id':'3148138736','supported_native_main_sha256':BASE_SHA,'sha256':{n:hashlib.sha256(b).hexdigest() for n,b in files.items()}}
 files['checksums.json']=(json.dumps(manifest,indent=2)+'\n').encode()
 a.output.parent.mkdir(parents=True,exist_ok=True)
 with zipfile.ZipFile(a.output,'w',zipfile.ZIP_DEFLATED) as z:

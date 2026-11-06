@@ -1,6 +1,6 @@
-# TABS 载具指令板 v6
+# TABS Fusion v6
 
-启用 TABS Order Tablet 和 TABS Vehicle Framework，重载单人地图，从工具第 6 组拿出工具。
+启用 TABS Fusion 和 TABS Vehicle Framework，重载单人地图，从工具第 6 组拿出工具。
 
 - 左键选择 TABS 载具。
 - Q 依次切换路径、停车射击、移动射击目标模式。

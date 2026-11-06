@@ -1,4 +1,4 @@
-# TABS Order Tablet
+# TABS Fusion
 
 A handheld vehicle route and fire-order planner for Teardown / TABS. Supports moving fire, independent vehicle scripts, fleet execution and launch delays.
 
@@ -10,4 +10,4 @@ The distribution must include the installer and the `tabs-vehicle-recorder` sour
 
 ## Manual release
 
-The v0.6.1 release ZIP includes the mod and a version-specific TABS bridge replacement. See [manual instructions](MANUAL-INSTALL.txt). No Python is needed for this installation method. The native TABS baseline must match the documented hash.
+The v0.6.2 release ZIP includes the mod and a version-specific TABS bridge replacement. See [manual instructions](MANUAL-INSTALL.txt). No Python is needed for this installation method. The native TABS baseline must match the documented hash.

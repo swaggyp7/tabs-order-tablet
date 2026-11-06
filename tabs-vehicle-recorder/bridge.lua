@@ -106,7 +106,7 @@ do
                     local speed=VecLength(GetBodyVelocity(GetVehicleBody(run.id)))
                     local detail=string.format("drive %.2f, speed %.1f m/s, wheels %d/%d",
                         GetVehicleDrive(run.id),speed,#(wheels.left or {}),#(wheels.right or {}))
-                    print("TABS Order Tablet v3: "..(v.displayName or tostring(run.id)).." - stalled: "..detail)
+                    print("TABS Fusion v3: "..(v.displayName or tostring(run.id)).." - stalled: "..detail)
                     finish(run,"Waypoint stalled: "..detail)
                 end
                 return
