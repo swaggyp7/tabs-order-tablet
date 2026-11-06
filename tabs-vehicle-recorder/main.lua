@@ -3,6 +3,7 @@ local TOOL="tabs_order_tablet"
 local vehicle=0
 local steps={}
 local plans={}
+local delays={3,5,7,10}
 local function statusKey() return P.."car."..vehicle.."." end
 local mode="move"
 local notice=""
@@ -32,11 +33,11 @@ local function send(command)
     SetString(P.."command",command); SetInt(P.."request",seq); pending=seq
     notice=""
 end
-local function execute()
-    if #steps==0 then notice="Add a waypoint or target first"; return end
-    SetInt(P.."vehicle",vehicle); SetInt(P.."count",#steps)
-    for i,s in ipairs(steps) do
-        local k=P.."step."..i.."."
+local function serialize(prefix,id,plan)
+    SetInt(prefix.."vehicle",id); SetInt(prefix.."count",#plan.steps)
+    SetInt(prefix.."delay",delays[plan.delay or 1])
+    for i,s in ipairs(plan.steps) do
+        local k=prefix.."step."..i.."."
         SetString(k.."kind",s.kind); SetInt(k.."body",s.body)
         SetBool(k.."attack",s.attack~=nil)
         if s.attack then
@@ -47,7 +48,21 @@ local function execute()
         SetInt(k.."weapon",s.weapon or 0); SetInt(k.."ammo",s.ammo or 0)
         SetFloat(k.."x",s.point[1]); SetFloat(k.."y",s.point[2]); SetFloat(k.."z",s.point[3])
     end
-    send("run")
+end
+local function execute()
+    if #steps==0 then notice="Add a waypoint or target first"; return end
+    serialize(P,vehicle,plans[vehicle]); send("run")
+end
+local function executeAll()
+    if not ready() then notice="Enable TABS and reload the level"; return end
+    local count=0
+    for id,plan in pairs(plans) do
+        if valid(id) and #plan.steps>0 then
+            count=count+1; serialize(P.."batch."..count..".",id,plan)
+        end
+    end
+    if count==0 then notice="No vehicle plans to execute"; return end
+    SetInt(P.."batch.count",count); send("runall")
 end
 local function owner(b)
     local v=GetBodyVehicle(b)
@@ -128,8 +143,14 @@ function tick()
     local running=GetBool(statusKey().."running")
     if running and not pending and InputPressed("f5") then send("stop"); return end
     if not equipped() then return end
+    -- Explicit camera-space pose avoids the generic tool's head-level fallback.
+    if not GetBool("game.thirdperson") then
+        SetToolTransformOverride(Transform(Vec(0.42,-0.48,-0.3),QuatEuler(0,-30,0)))
+        SetToolHandPoseLocalTransform(Transform(Vec(0,0,-0.05),QuatEuler(0,90,0)),nil)
+    end
     if valid(vehicle) then markers() elseif vehicle~=0 then plans[vehicle]=nil; vehicle=0; steps={}; notice="Vehicle lost" end
     if pending then return end
+    if InputPressed("f8") then executeAll(); return end
     if vehicle~=0 and InputPressed("r") then
         local plan=plans[vehicle]
         plan.mode,plan.weapon,plan.ammo,plan.attack=mode,weapon,ammo,attack
@@ -138,7 +159,9 @@ function tick()
     end
     if running then return end
     if loaded() and weapon==0 and GetInt(catalog.."count")>0 then selectWeapon(GetInt(catalog.."current")) end
-    if valid(vehicle) and InputPressed("delete") then
+    if valid(vehicle) and InputPressed("t") then
+        local plan=plans[vehicle]; plan.delay=(plan.delay or 1)%#delays+1; notice="Start delay: "..delays[plan.delay].." s"
+    elseif valid(vehicle) and InputPressed("delete") then
         steps={}; attack=nil; plans[vehicle].steps=steps; notice="Selected plan cleared"
     elseif InputPressed("q") and valid(vehicle) then mode=mode=="move" and "fire" or (mode=="fire" and "movingfire" or "move"); notice=""
     elseif InputPressed("g") then attack=nil; notice="Moving fire target cleared"
@@ -153,12 +176,13 @@ end
 function draw()
     if not equipped() then return end
     local running=GetBool(statusKey().."running")
-    UiPush(); UiTranslate(26,UiHeight()-240); UiFont("regular.ttf",17); UiAlign("left top")
-    UiColor(.03,.05,.07,.9); UiRect(980,220); UiTranslate(14,10); UiColor(1,1,1)
+    UiPush(); UiTranslate(26,UiHeight()-265); UiFont("regular.ttf",17); UiAlign("left top")
+    UiColor(.03,.05,.07,.9); UiRect(980,245); UiTranslate(14,10); UiColor(1,1,1)
     local function line(s) UiText(s); UiTranslate(0,25) end
-    line("TABS ORDER TABLET  v5  /  "..(running and "EXECUTING" or (vehicle==0 and "SELECT" or string.upper(mode))))
+    line("TABS ORDER TABLET  v6  /  "..(running and "EXECUTING" or (vehicle==0 and "SELECT" or string.upper(mode))))
     line(vehicle==0 and "LMB  Select vehicle" or "LMB  Add order      Q  Move / Fire / Moving fire      Backspace  Undo      R  Switch vehicle")
-    line("F7  Execute     F5  Stop selected     Del  Clear    |    Vehicle #"..vehicle.."    "..#steps.." orders")
+    line("F7  Execute     F8  Execute all     F5  Stop selected     Del  Clear    |    Vehicle #"..vehicle.."    "..#steps.." orders")
+    if valid(vehicle) then line("T  Start delay: "..delays[plans[vehicle].delay or 1].." s") end
     if mode~="move" and loaded() then
         line("Z  Weapon: "..GetString(catalog..weapon..".name").."     X  Ammo: "..GetString(catalog..weapon.."."..ammo))
     end
@@ -173,10 +197,11 @@ function draw()
     if attack then line("Next waypoint: MOVE + FIRE     G  Cancel target") end
     local status=notice~="" and notice or GetString(statusKey().."message")
     if running then
-        status="Executing order "..i
+        local wait=GetFloat(statusKey().."delay")
+        status=wait>0 and string.format("Starting in %.1f s",wait) or ("Executing order "..i)
         if steps[i] and steps[i].kind=="move" then status=status..string.format("   %.1f m remaining",GetFloat(statusKey().."remaining")) end
     end
-    if not ready() or GetInt(P.."motionVersion")~=5 then status="Reload the level to load the v5 TABS bridge" end
+    if not ready() or GetInt(P.."motionVersion")~=6 then status="Reload the level to load the v6 TABS bridge" end
     line(status)
     UiPop()
 end

@@ -35,7 +35,7 @@ function SetBodyVelocity() error("planner set velocity directly") end
 function SetBodyAngularVelocity() error("planner set angular velocity directly") end
 function DriveVehicle(id,throttle,steer,brake)
     assert(phase=="tick","DriveVehicle outside tick")
-    assert(id==100)
+    assert(id==100 or id==200)
     demand={throttle=throttle,steer=steer,brake=brake}
 end
 function PlayShootSound(...) end
@@ -52,6 +52,8 @@ function ShootWeapon(v,w,dt)
     shots[#shots+1]=GetInt('level.tvrplan.car.'..v.vehiclehandle..'.index')
     local shell=w:getCurShell(); shell.ammo=shell.ammo-1; w.reloadtimer=1
 end
+function SetToolTransformOverride(t) toolPose=t end
+function SetToolHandPoseLocalTransform(r,l) handPose=r end
 function tick() end
 function update() end
 """)
@@ -82,7 +84,7 @@ backendTick(0); click('lmb'); backendTick(0)
 rayBody=30; rayDist=15; click('lmb')
 click('q'); rayBody=40; click('lmb'); click('x'); click('lmb')
 click('q'); click('q'); rayBody=30; rayDist=25; click('lmb')
-click('q'); rayBody=40; click('z'); click('lmb'); click('f7')
+click('q'); rayBody=40; click('z'); click('lmb'); click('f7'); backendTick(3)
 backendTick(.016)
 local p='level.tvrplan.car.100.'
 assert(GetBool(p..'running') and GetInt('level.tvrplan.count')==5)
@@ -103,7 +105,7 @@ W.reloadtimer=0; backendUpdate(.1); assert(shots[2]==3 and GetInt(p..'index')==4
 backendUpdate(.1); assert(GetInt(p..'index')==4 and #shots==2)
 for i=1,300 do if GetInt(p.."index")==4 then backendTick(.05); physics(.05) end end; W.reloadtimer=0; backendUpdate(.1)
 assert(shots[3]==5 and not GetBool(p..'running') and W.shelltypes[1].ammo==1 and W.shelltypes[2].ammo==1 and MG.shelltypes[1].ammo==4)
-click('f7'); backendTick(0); click('f5'); backendTick(0)
+click('f7'); backendTick(3); backendTick(0); click('f5'); backendTick(0)
 assert(not GetBool(p..'running') and #shots==3)
 -- A tank pivots on opposing wheel torque before advancing behind its hull.
 local goal=TransformToParentPoint(GetBodyTransform(10),Vec(8,0,12))
@@ -132,7 +134,7 @@ entities[10].transform=Transform(Vec(10,0,30))
 MG.reloadtimer=0; MG.shoottimer=0; MG.shelltypes[1].ammo=5
 click('delete'); click('q'); rayBody=40; click('lmb')
 rayBody=30; rayDist=40; click('lmb')
-rayDist=60; click('lmb'); click('f7'); backendTick(.05)
+rayDist=60; click('lmb'); click('f7'); backendTick(3); backendTick(.05)
 local p='level.tvrplan.car.100.'
 assert(GetBool('level.tvrplan.step.1.attack'))
 assert(not GetBool('level.tvrplan.step.2.attack'))
@@ -149,3 +151,32 @@ click('f5'); backendTick(0); MG.reloadtimer=0; backendUpdate(.1)
 assert(#shots==n+2 and not GetBool(p..'running'))
 """)
 print('PASS: moving fire at speed, target serialization, segment isolation, reload and stop')
+
+lua.execute("""
+-- Build a second vehicle plan and execute both using the real F8 command.
+entities[200]={body=20,tags={TABS=true}}
+entities[20]=copy(entities[10]); entities[20].vehicle=200
+local second=copy(V); second.vehiclehandle=200; second.parts.hull=20
+TABSVehicles[200]=second
+click('r'); rayBody=20; click('lmb'); backendTick(0)
+rayBody=30; rayDist=80; click('lmb')
+-- Default 3 s -> 5 -> 7 -> 10 -> 3 -> 5, independently for car 200.
+for i=1,5 do click('t') end
+click('f8'); backendTick(0)
+local a='level.tvrplan.car.100.'; local b='level.tvrplan.car.200.'
+assert(GetBool(a..'running') and GetBool(b..'running'))
+assert(GetFloat(a..'delay')==3 and GetFloat(b..'delay')==5)
+assert(demand.brake and GetInt(a..'index')==1 and GetInt(b..'index')==1)
+local n=#shots; backendUpdate(.1); assert(#shots==n,'countdown must not fire')
+backendTick(2); backendUpdate(.1); assert(#shots==n)
+assert(GetFloat(a..'delay')==1 and GetFloat(b..'delay')==3)
+backendTick(1); assert(GetFloat(a..'delay')==0 and GetFloat(b..'delay')==2)
+-- F5 cancels the selected second car while it is still waiting.
+click('f5'); backendTick(0)
+assert(not GetBool(b..'running') and GetBool(a..'running'))
+-- Re-trigger all does not restart the first car's active script.
+click('f8'); backendTick(0)
+assert(GetFloat(a..'delay')==0 and GetFloat(b..'delay')==5)
+assert(toolPose.pos[1]>0 and toolPose.pos[2]<0 and handPose)
+""")
+print('PASS: F8 batches independent plans, four delay choices, countdown suppresses fire, cancel waiting and no restart')

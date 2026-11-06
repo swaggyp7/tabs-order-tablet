@@ -20,20 +20,22 @@ do
             v.controls.aimdir=run.saved.aimdir or v.controls.aimdir
         end
         runs[run.id]=nil
+        SetFloat(run.key.."delay",0)
         SetBool(run.key.."running",false)
         SetString(run.key.."message",msg)
     end
-    local function start(id)
+    local function start(id,source)
+        source=source or P
         if runs[id] then return end
         local key=statusKey(id)
         local v=TABSVehicles[id]
         if not v or not TVRPlan.valid(id) then return SetString(key.."message","Select a live TABS vehicle") end
         if GetPlayerVehicle()==id then return SetString(key.."message","Exit this vehicle first") end
-        local count=GetInt(P.."count")
+        local count=GetInt(source.."count")
         if count<1 or count>TVRPlan.limit then return SetString(key.."message","Add an order first") end
         local steps={}
         for i=1,count do
-            local key=P.."step."..i.."."
+            local key=source.."step."..i.."."
             local kind=GetString(key.."kind")
             if kind~="move" and kind~="fire" then return SetString(statusKey(id).."message","Invalid order") end
             steps[i]={kind=kind,weapon=GetInt(key.."weapon"),ammo=GetInt(key.."ammo"),body=GetInt(key.."body"),point=Vec(GetFloat(key.."x"),GetFloat(key.."y"),GetFloat(key.."z"))}
@@ -42,9 +44,12 @@ do
                 steps[i].attack={weapon=GetInt(k.."weapon"),ammo=GetInt(k.."ammo"),body=GetInt(k.."body"),point=Vec(GetFloat(k.."x"),GetFloat(k.."y"),GetFloat(k.."z"))}
             end
         end
+        local delay=GetInt(source.."delay")
+        if delay~=3 and delay~=5 and delay~=7 and delay~=10 then delay=0 end
+        SetFloat(key.."delay",delay)
         local saved={}
         for k,x in pairs(v.controls) do saved[k]=x end
-        runs[id]={id=id,key=key,steps=steps,i=1,time=0,saved=saved,wheelDrives={}}
+        runs[id]={id=id,key=key,steps=steps,i=1,time=0,delay=delay,saved=saved,wheelDrives={}}
         SetBool(key.."running",true); SetString(key.."message","Executing"); SetInt(key.."index",1)
     end
     local function shoot(run,step,point,dt,moving)
@@ -133,7 +138,7 @@ do
     local originalTick=tick
     function tick(dt)
         SetFloat(P.."bridgeTime",GetTime())
-        SetInt(P.."motionVersion",5)
+        SetInt(P.."motionVersion",6)
         if not HasKey(P.."clientTime") or math.abs(GetTime()-GetFloat(P.."clientTime"))>.75 then
             for _,run in pairs(runs) do finish(run,"Tool disabled") end
         else
@@ -145,7 +150,13 @@ do
             if seq~=last then
                 last=seq
                 local id=GetInt(P.."vehicle")
-                if GetString(P.."command")=="run" then start(id)
+                if GetString(P.."command")=="runall" then
+                    local count=math.max(0,math.min(GetInt(P.."batch.count"),256))
+                    for i=1,count do
+                        local source=P.."batch."..i.."."
+                        start(GetInt(source.."vehicle"),source)
+                    end
+                elseif GetString(P.."command")=="run" then start(id)
                 elseif runs[id] then finish(runs[id],"Stopped") end
                 SetInt(P.."ack",seq)
             end
@@ -158,7 +169,13 @@ do
             finalBrakes[id]=nil
         end
         for id,run in pairs(runs) do
-            if run.steps[run.i].kind=="move" then guardedAdvance(run,dt)
+            local activeDt=math.max(0,dt-run.delay)
+            run.delay=math.max(0,run.delay-dt)
+            SetFloat(run.key.."delay",run.delay)
+            if not TABSVehicles[id] or not TVRPlan.valid(id) then finish(run,"Vehicle lost")
+            elseif run.delay>0 then
+                brake(TABSVehicles[id]); DriveVehicle(id,0,0,true)
+            elseif run.steps[run.i].kind=="move" then guardedAdvance(run,activeDt)
             elseif TVRPlan.valid(id) and GetPlayerVehicle()~=id then DriveVehicle(id,0,0,true) end
         end
     end
@@ -167,7 +184,8 @@ do
         originalUpdate(dt)
         for _,run in pairs(runs) do
             local step=run.steps[run.i]
-            if step.kind=="fire" then guardedAdvance(run,dt)
+            if run.delay>0 then -- No aiming or firing during the countdown.
+            elseif step.kind=="fire" then guardedAdvance(run,dt)
             elseif step.attack then
                 local ok,err=pcall(function()
                     local point=TVRPlan.point(step.attack)
