@@ -2,3 +2,4 @@ name = TABS Fusion
 author = Andrew
 description = Plan routes, single shots and moving fire for TABS vehicles. Execute independent vehicle scripts together with configurable launch delays. Tool group 6. Single player; requires TABS Vehicle Framework and the included bridge installer. See README.md for setup.
 tags = Gameplay
+preview = preview.jpg
