@@ -10,13 +10,11 @@ Plan vehicle action sequences with a handheld tool: drive, fire, fire on the mov
 
 ## Requirements and installation
 
-Single-player Teardown with TABS Vehicle Framework (Workshop 3148138736). **Enabling this tool alone does not install the bridge.** This distribution includes a Python installer that adds a bounded bridge to your local TABS main.lua and preserves a verified backup. The manual release ZIP includes a version-specific replacement main.lua; see MANUAL-INSTALL.txt in the archive. The source installer remains available separately.
+**No Python required for the release ZIP.** Requires single-player Teardown, TABS Vehicle Framework (Workshop 3148138736) and its required items.
 
-1. Extract the full archive. Install Python 3 if needed.
-2. Run `python tools/deploy_vehicle_recorder.py` from the extracted folder. Default TABS path: `D:/Steam/steamapps/workshop/content/1167630/3148138736`. Use `--target "YOUR_TABS_FOLDER"` to change it; `--help` lists other options.
-3. Enable TABS Fusion and TABS; reload the level. Equip the tool in group 6.
+Download **TABS-Fusion-v0.6.2.zip** from the [release Assets](https://github.com/swaggyp7/tabs-order-tablet/releases/tag/v0.6.2). Follow the archive's INSTALL.txt or the [中英文安装教程](../docs/INSTALL.md). Back up your original TABS main.lua and verify the supported SHA256 before replacing it with TABS-bridge/main.lua from the ZIP.
 
-Keep the installer backup folder. Before TABS is updated or patched with another installer, restore using `python tools/deploy_vehicle_recorder.py --uninstall`, then update and reinstall. If Workshop changes the source, this installer refuses to overwrite the changed file; keep the backup and resolve the update before reinstalling.
+Use either the Workshop tool or the ZIP's local tool folder, not both. Enable TABS and Fusion, reload the level, and equip the tool in group 6. Restore your own original main.lua backup to uninstall. This ZIP is not a combined Hit Replay patch; other replacements of the same file conflict.
 
 ## Controls
 
@@ -31,3 +29,9 @@ Installer preservation/rollback and simulated route, moving-fire, launch-delay a
 ## Manual replacement ZIP (v0.6.2)
 
 The release asset includes both the mod folder and `TABS-bridge/main.lua`. Follow the root `INSTALL.txt`; this route needs no Python. Use only one installation method. Compare the original TABS main.lua SHA256 before replacing it and preserve your own backup. The bundled main.lua excludes unrelated local patches.
+
+## Developer tools
+
+The optional Python patch installer is an alternative development installation method. It is not required for players using the manual ZIP. Do not run it on top of the manual replacement. Run `python tools/deploy_vehicle_recorder.py --help` for development options. Its `--uninstall` option applies to installations it manages; manual ZIP users restore their own backup.
+
+The build script requires Python and a verified original TABS main.lua. Simulated checks additionally require Lupa; they do not replace in-game validation.
